@@ -6,6 +6,7 @@
 #    *) cmake -DCMAKE_TOOLCHAIN_FILE=~/mingw-w64-x86_64.cmake ..
 
 set(CMAKE_SYSTEM_NAME Windows)
+set(CMAKE_BUILD_TYPE Release)
 set(TOOLCHAIN_PREFIX x86_64-w64-mingw32)
 
 # cross compilers to use for C, C++ and Fortran

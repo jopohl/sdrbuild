@@ -6,6 +6,7 @@
 #    *) cmake -DCMAKE_TOOLCHAIN_FILE=~/Toolchain-Ubuntu-mingw32.cmake ..
 
 set(CMAKE_SYSTEM_NAME Windows)
+set(CMAKE_BUILD_TYPE Release)
 set(TOOLCHAIN_PREFIX i686-w64-mingw32)
 
 # cross compilers to use for C and C++
