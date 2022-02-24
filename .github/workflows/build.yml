@@ -81,6 +81,8 @@ jobs:
                 -DLIBUSB_INCLUDE_DIRS=$GITHUB_WORKSPACE/libusb/include/libusb-1.0 \
                 -DLIBPTHREADSWIN32_PATH=$GITHUB_WORKSPACE/pthreads/Pre-built.2 \
                 -DLIBUSB_SKIP_VERSION_CHECK=Yes \
+                -DLIBUSB_PATH=$GITHUB_WORKSPACE/libusb \
+                -DLIBUSB_LIBRARY_PATH_SUFFIX=VS2019/MS$ARCH_NUM/Release/dll \
                 -DLIBUSB_FOUND=true \
                 -DENABLE_BACKEND_LIBUSB=ON ..
           cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
