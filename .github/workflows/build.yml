@@ -77,7 +77,7 @@ jobs:
           git clone https://github.com/Nuand/bladeRF
           mkdir bladeRF/host/build && cd bladeRF/host/build
           cmake -A $CMAKE_ARCH \
-                -DLIBUSB_PATH=$GITHUB_WORKSPACE/libusb \
+                -DLIBUSB_PATH=$GITHUB_WORKSPACE/libusb/VS2019 \
                 -DLIBPTHREADSWIN32_PATH=$GITHUB_WORKSPACE/pthreads/Pre-built.2 \
                 -DENABLE_BACKEND_LIBUSB=ON ..
 
