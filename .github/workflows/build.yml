@@ -20,9 +20,11 @@ jobs:
     env:
       ARCH: ${{ matrix.architecture }}
       ARCH_NUM: "${{ matrix.architecture == 'x64' && '64' || '32' }}"
+      CMAKE_ARCH: "${{ matrix.architecture == 'x64' && 'x64' || 'Win32' }}"
 
     steps:
       - run: choco install wget --no-progress
+
       - name: Setup libusb
         run: |
           mkdir libusb && cd libusb
@@ -51,13 +53,14 @@ jobs:
           lib /machine:$ARCH /def:libfftw3l-3.def
           ls $GITHUB_WORKSPACE/fftw
 
-      - name: Airspy build
+      - name: AirSpy build
         run: |
           git clone https://github.com/jopohl/airspyone_host
           mkdir airspyone_host/build && cd airspyone_host/build
-          cmake -DLIBUSB_LIBRARIES=$GITHUB_WORKSPACE/libusb/VS2019/MS$ARCH_NUM/Release/lib/libusb-1.0.lib \
+          cmake -A $CMAKE_ARCH \
+                -DLIBUSB_LIBRARIES=$GITHUB_WORKSPACE/libusb/VS2019/MS$ARCH_NUM/Release/lib/libusb-1.0.lib \
                 -DLIBUSB_INCLUDE_DIR=$GITHUB_WORKSPACE/libusb/include/libusb-1.0 \
                 -DTHREADS_PTHREADS_INCLUDE_DIR=$GITHUB_WORKSPACE/pthreads/Pre-built.2/include \
                 -DTHREADS_PTHREADS_WIN32_LIBRARY=$GITHUB_WORKSPACE/pthreads/Pre-built.2/lib/$ARCH/pthreadVC2.lib ..
-          cmake --build . --parallel $NUMBER_OF_PROCESSORS --target airspy --config Release
-          cmake --install . --config Release --prefix $GITHUB_WORKSPACE/result
+          cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
+          cmake --install . --config Release --prefix $GITHUB_WORKSPACE/dist
