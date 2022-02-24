@@ -83,6 +83,8 @@ jobs:
                 -DLIBUSB_SKIP_VERSION_CHECK=Yes \
                 -DLIBUSB_FOUND=true \
                 -DENABLE_BACKEND_LIBUSB=ON ..
+          cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
+          cmake --install . --config Release --prefix $GITHUB_WORKSPACE/dist
 
       - name: HackRF build
         run: |
