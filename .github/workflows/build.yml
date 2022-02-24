@@ -55,7 +55,7 @@ jobs:
 
       - name: AirSpy build
         run: |
-          git clone https://github.com/jopohl/airspyone_host
+          git clone --depth 1 https://github.com/jopohl/airspyone_host
           mkdir airspyone_host/build && cd airspyone_host/build
           cmake -A $CMAKE_ARCH \
                 -DLIBUSB_LIBRARIES=$GITHUB_WORKSPACE/libusb/VS2019/MS$ARCH_NUM/Release/lib/libusb-1.0.lib \
@@ -67,7 +67,7 @@ jobs:
 
       - name: HackRF build
         run: |
-          git clone https://github.com/greatscottgadgets/hackrf
+          git clone --depth 1 https://github.com/greatscottgadgets/hackrf
           mkdir hackrf/host/build && cd hackrf/host/build
           cmake -A $CMAKE_ARCH \
                 -DLIBUSB_LIBRARIES=$GITHUB_WORKSPACE/libusb/VS2019/MS$ARCH_NUM/Release/lib/libusb-1.0.lib \
