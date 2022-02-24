@@ -15,6 +15,7 @@ jobs:
         architecture: [x64, x86]
 
     steps:
+      - run: choco install wget
       - name: Setup libusb
         run: |
           mkdir libusb && cd libusb
