@@ -79,7 +79,7 @@ jobs:
           cmake -A $CMAKE_ARCH \
                 -DLIBUSB_PATH=$GITHUB_WORKSPACE/libusb \
                 -DLIBPTHREADSWIN32_PATH=$GITHUB_WORKSPACE\pthreads\Pre-built.2 \
-                -DFX3_SDK_PATH=$GITHUB_WORKSPACE\fx3sdk
+                -DFX3_SDK_PATH=$GITHUB_WORKSPACE\fx3sdk ..
 
       - name: HackRF build
         run: |
