@@ -81,6 +81,7 @@ jobs:
                 -DLIBUSB_INCLUDE_DIRS=$GITHUB_WORKSPACE/libusb/include/libusb-1.0 \
                 -DLIBPTHREADSWIN32_PATH=$GITHUB_WORKSPACE/pthreads/Pre-built.2 \
                 -DLIBUSB_SKIP_VERSION_CHECK=Yes \
+                -DLIBUSB_FOUND=true \
                 -DENABLE_BACKEND_LIBUSB=ON ..
 
       - name: HackRF build
