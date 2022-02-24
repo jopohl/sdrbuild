@@ -26,14 +26,14 @@ jobs:
       - name: Setup libusb
         run: |
           mkdir libusb && cd libusb
-          wget https://github.com/libusb/libusb/releases/download/v1.0.25/libusb-1.0.25.7z
+          wget -nv https://github.com/libusb/libusb/releases/download/v1.0.25/libusb-1.0.25.7z
           7z x libusb-1.0.25.7z
           ls $GITHUB_WORKSPACE/libusb
 
       - name: Setup pthreads
         run: |
           mkdir pthreads && cd pthreads
-          wget https://www.mirrorservice.org/sites/sourceware.org/pub/pthreads-win32/pthreads-w32-2-9-1-release.zip
+          wget -nv https://www.mirrorservice.org/sites/sourceware.org/pub/pthreads-win32/pthreads-w32-2-9-1-release.zip
           7z x pthreads-w32-2-9-1-release.zip
           ls $GITHUB_WORKSPACE/pthreads
 
@@ -44,7 +44,7 @@ jobs:
       - name: Setup FFTW
         run: |
           mkdir fftw && cd fftw
-          wget https://fftw.org/pub/fftw/fftw-3.3.5-dll$ARCH_NUM.zip
+          wget -nv https://fftw.org/pub/fftw/fftw-3.3.5-dll$ARCH_NUM.zip
           7z x fftw-3.3.5-dll$ARCH_NUM.zip
           lib /machine:$ARCH /def:libfftw3-3.def
           lib /machine:$ARCH /def:libfftw3f-3.def
