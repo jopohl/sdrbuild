@@ -41,7 +41,7 @@ jobs:
       - name: Setup FFTW
         run: |
           mkdir fftw && cd fftw
-          if [[ $ARCH=="x64" ]]
+          if [[ $ARCH == "x64" ]]
           then
             wget https://fftw.org/pub/fftw/fftw-3.3.5-dll64.zip
             7z x fftw-3.3.5-dll64.zip
