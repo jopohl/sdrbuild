@@ -6,7 +6,7 @@ ENV TZ=Europe/Berlin
 
 ADD mingw-w64-i686.cmake mingw-w64-x86_64.cmake /root/
 
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \  
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
  && apt-get -qq update \
  && apt-get -qq install git mingw-w64 mingw-w64-tools cmake wget p7zip-full file llvm \
  && mkdir -p /result/64 && mkdir -p /result/32 \
@@ -24,13 +24,11 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
 
 RUN git clone --depth 1 https://github.com/airspy/airspyone_host /airspy && cd /airspy \
  && mkdir build && cd build \
- && cmake -DCMAKE_TOOLCHAIN_FILE=~/mingw-w64-x86_64.cmake .. \
- && make -j$(nproc) \
- && cp airspy-tools/src/libairspy.dll /result/64 \
+ && cmake -DCMAKE_TOOLCHAIN_FILE=~/mingw-w64-x86_64.cmake -DCMAKE_INSTALL_PREFIX=/result/64 .. \
+ && make -j$(nproc) install \
  && cd .. && mkdir build32 && cd build32 \
- && cmake -DCMAKE_TOOLCHAIN_FILE=~/mingw-w64-i686.cmake .. \
- && make -j$(nproc) \
- && cp airspy-tools/src/libairspy.dll /result/32
+ && cmake -DCMAKE_TOOLCHAIN_FILE=~/mingw-w64-i686.cmake -DCMAKE_INSTALL_PREFIX=/result/32 .. \
+ && make -j$(nproc) install
 
 RUN wget http://www.fftw.org/fftw-3.3.10.tar.gz \
  && tar xf fftw-3.3.10.tar.gz \
@@ -62,13 +60,11 @@ RUN wget http://www.fftw.org/fftw-3.3.10.tar.gz \
 
 RUN git clone --depth 1 https://github.com/greatscottgadgets/hackrf /hackrf && cd /hackrf/host \
  && mkdir build && cd build \
- && cmake -DCMAKE_TOOLCHAIN_FILE=~/mingw-w64-x86_64.cmake -DFFTW_LIBRARIES=/usr/x86_64-w64-mingw32/lib/ .. \
- && make -j$(nproc) \
- && cp libhackrf/src/libhackrf.dll /result/64 \
+ && cmake -DCMAKE_TOOLCHAIN_FILE=~/mingw-w64-x86_64.cmake -DFFTW_LIBRARIES=/usr/x86_64-w64-mingw32/lib/ -DCMAKE_INSTALL_PREFIX=/result/64 .. \
+ && make -j$(nproc) install \
  && cd .. && mkdir build32 && cd build32 \
- && cmake -DCMAKE_TOOLCHAIN_FILE=~/mingw-w64-i686.cmake -DFFTW_LIBRARIES=/usr/i686-w64-mingw32/lib/ .. \
- && make -j$(nproc) \
- && cp libhackrf/src/libhackrf.dll /result/32
+ && cmake -DCMAKE_TOOLCHAIN_FILE=~/mingw-w64-i686.cmake -DFFTW_LIBRARIES=/usr/i686-w64-mingw32/lib/ -DCMAKE_INSTALL_PREFIX=/result/32 .. \
+ && make -j$(nproc) install
 
 
 ADD genlib.sh /
