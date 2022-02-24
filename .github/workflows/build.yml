@@ -75,7 +75,8 @@ jobs:
       - name: BladeRF build
         run: |
           git clone https://github.com/Nuand/bladeRF
-          mkdir bladeRF/host/build && cd bladeRF/host/build
+          mkdir bladeRF/host/build && cd bladeRF/host/build 
+          sed -i 's/include(FindLibUSB)//g' ../CMakeLists.txt  # remove broken LibUSB find routine and set variables ourselves
           cmake -A $CMAKE_ARCH \
                 -DLIBUSB_LIBRARIES=$GITHUB_WORKSPACE/libusb/VS2019/MS$ARCH_NUM/Release/lib/libusb-1.0.lib \
                 -DLIBUSB_INCLUDE_DIRS=$GITHUB_WORKSPACE/libusb/include/libusb-1.0 \
