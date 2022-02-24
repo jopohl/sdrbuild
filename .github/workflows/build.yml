@@ -72,22 +72,47 @@ jobs:
           cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
           cmake --install . --config Release --prefix $GITHUB_WORKSPACE/dist
 
-      - name: BladeRF build
+      - name: BladeRF clone
         run: |
           git clone https://github.com/Nuand/bladeRF
           mkdir bladeRF/host/build && cd bladeRF/host/build 
           sed -i 's/include(FindLibUSB)//g' ../CMakeLists.txt  # remove broken LibUSB find routine and set variables ourselves
-          cmake -A $CMAKE_ARCH \
-                -DLIBUSB_LIBRARIES=$GITHUB_WORKSPACE/libusb/VS2019/MS$ARCH_NUM/Release/lib/libusb-1.0.lib \
-                -DLIBUSB_INCLUDE_DIRS=$GITHUB_WORKSPACE/libusb/include/libusb-1.0 \
-                -DLIBPTHREADSWIN32_PATH=$GITHUB_WORKSPACE/pthreads/Pre-built.2 \
-                -DLIBUSB_SKIP_VERSION_CHECK=Yes \
-                -DLIBUSB_PATH=$GITHUB_WORKSPACE/libusb \
-                -DLIBUSB_LIBRARY_PATH_SUFFIX=VS2019/MS$ARCH_NUM/Release/dll \
-                -DLIBUSB_FOUND=true \
-                -DENABLE_BACKEND_LIBUSB=ON ..
-          cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
-          cmake --install . --config Release --prefix $GITHUB_WORKSPACE/dist
+
+      - name: BladeRF patch
+        run: |
+          import os
+          os.chdir("bladeRF/host")
+          for root, dirs, files in os.walk(os.path.realpath(os.curdir)):
+            for file in files:
+                if not file.endswith(".c") and not file.endswith(".h"):
+                    continue
+
+                fname = os.path.join(root, file)
+                with open(fname, "r") as f:
+                    lines = f.readlines()
+
+                with open(fname, "w") as f:
+                    for i, line in enumerate(lines):
+                        if line.startswith("#include <pthread.h>") \
+                                and not lines[i + 1].startswith("#define HAVE_STRUCT_TIMESPEC 1"):
+                            print("Patching {}".format(fname))
+                            f.write("#define HAVE_STRUCT_TIMESPEC 1\n")
+                        f.write(line)
+        shell: python
+
+      - name: BladeRF build
+        run: |
+        cmake -A $CMAKE_ARCH \
+              -DLIBUSB_LIBRARIES=$GITHUB_WORKSPACE/libusb/VS2019/MS$ARCH_NUM/Release/lib/libusb-1.0.lib \
+              -DLIBUSB_INCLUDE_DIRS=$GITHUB_WORKSPACE/libusb/include/libusb-1.0 \
+              -DLIBPTHREADSWIN32_PATH=$GITHUB_WORKSPACE/pthreads/Pre-built.2 \
+              -DLIBUSB_SKIP_VERSION_CHECK=Yes \
+              -DLIBUSB_PATH=$GITHUB_WORKSPACE/libusb \
+              -DLIBUSB_LIBRARY_PATH_SUFFIX=VS2019/MS$ARCH_NUM/Release/dll \
+              -DLIBUSB_FOUND=true \
+              -DENABLE_BACKEND_LIBUSB=ON ..
+        cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
+        cmake --install . --config Release --prefix $GITHUB_WORKSPACE/dist
 
       - name: HackRF build
         run: |
