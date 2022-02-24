@@ -78,6 +78,7 @@ jobs:
           mkdir bladeRF/host/build && cd bladeRF/host/build
           cmake -A $CMAKE_ARCH \
                 -DLIBUSB_PATH=$GITHUB_WORKSPACE/libusb/VS2019 \
+                -DLIBUSB_LIBRARY_PATH_SUFFIX=MS$ARCH_NUM/Release/dll \
                 -DLIBPTHREADSWIN32_PATH=$GITHUB_WORKSPACE/pthreads/Pre-built.2 \
                 -DENABLE_BACKEND_LIBUSB=ON ..
 
