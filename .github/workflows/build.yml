@@ -26,7 +26,7 @@ jobs:
       - name: Setup pthreads
         run: |
           mkdir pthreads && cd pthreads
-          https://www.mirrorservice.org/sites/sourceware.org/pub/pthreads-win32/pthreads-w32-2-9-1-release.zip
+          wget https://www.mirrorservice.org/sites/sourceware.org/pub/pthreads-win32/pthreads-w32-2-9-1-release.zip
           7z x pthreads-w32-2-9-1-release.zip
           ls $GITHUB_WORKSPACE
         shell: bash
