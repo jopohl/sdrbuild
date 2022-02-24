@@ -24,6 +24,7 @@ jobs:
 
     steps:
       - run: choco install wget --no-progress
+
       - name: Setup libusb
         run: |
           mkdir libusb && cd libusb
@@ -52,7 +53,7 @@ jobs:
           lib /machine:$ARCH /def:libfftw3l-3.def
           ls $GITHUB_WORKSPACE/fftw
 
-      - name: Airspy build
+      - name: AirSpy build
         run: |
           git clone https://github.com/jopohl/airspyone_host
           mkdir airspyone_host/build && cd airspyone_host/build
@@ -62,5 +63,5 @@ jobs:
                 -DTHREADS_PTHREADS_INCLUDE_DIR=$GITHUB_WORKSPACE/pthreads/Pre-built.2/include \
                 -DTHREADS_PTHREADS_WIN32_LIBRARY=$GITHUB_WORKSPACE/pthreads/Pre-built.2/lib/$ARCH/pthreadVC2.lib ..
           cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
-          cmake --install . --config Release --prefix $GITHUB_WORKSPACE/result
-          ls $GITHUB_WORKSPACE/result
+          cmake --install . --config Release --prefix $GITHUB_WORKSPACE/dist
+          ls $GITHUB_WORKSPACE/dist
