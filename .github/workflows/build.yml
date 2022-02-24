@@ -50,3 +50,14 @@ jobs:
           lib /machine:$ARCH /def:libfftw3f-3.def
           lib /machine:$ARCH /def:libfftw3l-3.def
           ls $GITHUB_WORKSPACE/fftw
+
+      - name: Airspy build
+        run: |
+          git clone https://github.com/airspy/airspyone_host
+          mkdir airspyone_host/build && cd airspyone_host/build
+          cmake -DLIBUSB_LIBRARIES=$GITHUB_WORKSPACE/libusb/VS2019/MS$ARCH_NUM/Release/lib \
+                -DLIBUSB_INCLUDE_DIR=$GITHUB_WORKSPACE/libusb/include/libusb-1.0 \
+                -DTHREADS_PTHREADS_INCLUDE_DIR=$GITHUB_WORKSPACE/pthreads/Pre-built.2/include \
+                -DTHREADS_PTHREADS_WIN32_LIBRARY=$GITHUB_WORKSPACE/pthreads/Pre-built.2/lib/$ARCH/pthreadVC2.lib ..
+          cmake --build . --parallel $NUMBER_OF_PROCESSORS --target airspy --config Release
+          cmake --build . --config Release --target install
