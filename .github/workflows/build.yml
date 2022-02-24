@@ -112,6 +112,7 @@ jobs:
                 -DLIBUSB_PATH=$GITHUB_WORKSPACE/libusb \
                 -DLIBUSB_LIBRARY_PATH_SUFFIX=VS2019/MS$ARCH_NUM/Release/dll \
                 -DLIBUSB_FOUND=true \
+                -DTREAT_WARNINGS_AS_ERRORS=OFF \
                 -DENABLE_BACKEND_LIBUSB=ON ..
           cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
           cmake --install . --config Release --prefix $GITHUB_WORKSPACE/dist
