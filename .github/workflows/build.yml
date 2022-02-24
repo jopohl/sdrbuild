@@ -19,6 +19,7 @@ jobs:
         architecture: [x86, x64]
     env:
       ARCH: ${{ matrix.architecture }}
+      ARCH_NUM: "${{ matrix.architecture == 'x64' && '64' || '32' }}"
 
     steps:
       - run: choco install wget --no-progress
@@ -43,14 +44,8 @@ jobs:
       - name: Setup FFTW
         run: |
           mkdir fftw && cd fftw
-          if [[ $ARCH == "x64" ]]
-          then
-            wget https://fftw.org/pub/fftw/fftw-3.3.5-dll64.zip
-            7z x fftw-3.3.5-dll64.zip
-          else
-            wget https://fftw.org/pub/fftw/fftw-3.3.5-dll32.zip
-            7z x fftw-3.3.5-dll32.zip
-          fi
+          wget https://fftw.org/pub/fftw/fftw-3.3.5-dll$ARCH_NUM.zip
+          7z x fftw-3.3.5-dll$ARCH_NUM.zip
           lib /machine:$ARCH /def:libfftw3-3.def
           lib /machine:$ARCH /def:libfftw3f-3.def
           lib /machine:$ARCH /def:libfftw3l-3.def
