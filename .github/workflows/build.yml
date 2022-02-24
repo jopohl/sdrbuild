@@ -34,6 +34,11 @@ jobs:
           7z x pthreads-w32-2-9-1-release.zip
           ls $GITHUB_WORKSPACE/pthreads
 
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+        with:
+          msbuild-architecture: ${{ matrix.architecture }}
+
       - name: Setup FFTW
         run: |
           mkdir fftw && cd fftw
