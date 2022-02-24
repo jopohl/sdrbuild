@@ -53,6 +53,13 @@ jobs:
           lib /machine:$ARCH /def:libfftw3l-3.def
           ls $GITHUB_WORKSPACE/fftw
 
+      - name: Setup FX3SDK
+        run: |
+          mkdir fx3sdk && cd fx3sdk
+          wget http://downloads.myriadrf.org/project/limesuite/appveyor/FX3SDK.zip
+          7z x FX3SDK.zip
+          ls $GITHUB_WORKSPACE/fx3sdk
+
       - name: AirSpy build
         run: |
           git clone --depth 1 https://github.com/jopohl/airspyone_host
@@ -64,6 +71,15 @@ jobs:
                 -DTHREADS_PTHREADS_WIN32_LIBRARY=$GITHUB_WORKSPACE/pthreads/Pre-built.2/lib/$ARCH/pthreadVC2.lib ..
           cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
           cmake --install . --config Release --prefix $GITHUB_WORKSPACE/dist
+
+      - name: BladeRF build
+        run: |
+          git clone https://github.com/Nuand/bladeRF
+          mkdir bladeRF/host/build && cd bladeRF/host/build
+          cmake -A $CMAKE_ARCH \
+                -DLIBUSB_PATH=$GITHUB_WORKSPACE/libusb \
+                -DLIBPTHREADSWIN32_PATH=$GITHUB_WORKSPACE\pthreads\Pre-built.2 \
+                -DFX3_SDK_PATH=$GITHUB_WORKSPACE\fx3sdk
 
       - name: HackRF build
         run: |
@@ -78,3 +94,4 @@ jobs:
                 -DFFTW_LIBRARIES=$GITHUB_WORKSPACE/fftw/libfftw3f-3.lib ..
           cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
           cmake --install . --config Release --prefix $GITHUB_WORKSPACE/dist
+
