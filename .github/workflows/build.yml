@@ -103,6 +103,7 @@ jobs:
 
       - name: BladeRF build
         run: |
+          cd bladeRF/host/build
           cmake -A $CMAKE_ARCH \
                 -DLIBUSB_LIBRARIES=$GITHUB_WORKSPACE/libusb/VS2019/MS$ARCH_NUM/Release/lib/libusb-1.0.lib \
                 -DLIBUSB_INCLUDE_DIRS=$GITHUB_WORKSPACE/libusb/include/libusb-1.0 \
