@@ -17,6 +17,8 @@ jobs:
       matrix:
         os: [windows-2019]
         architecture: [x86, x64]
+    env:
+      ARCH: ${{ matrix.architecture }}
 
     steps:
       - run: choco install wget --no-progress
@@ -53,5 +55,3 @@ jobs:
           lib /machine:$ARCH /def:libfftw3f-3.def
           lib /machine:$ARCH /def:libfftw3l-3.def
           ls $GITHUB_WORKSPACE/fftw
-        env:
-          ARCH: ${{ matrix.architecture }}
