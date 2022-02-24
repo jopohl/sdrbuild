@@ -23,7 +23,7 @@ jobs:
       CMAKE_ARCH: "${{ matrix.architecture == 'x64' && 'x64' || 'Win32' }}"
 
     steps:
-      - run: choco install wget --no-progress
+      - run: choco install wget sed --no-progress
 
       - name: Setup libusb
         run: |
@@ -78,8 +78,8 @@ jobs:
           mkdir bladeRF/host/build && cd bladeRF/host/build
           cmake -A $CMAKE_ARCH \
                 -DLIBUSB_PATH=$GITHUB_WORKSPACE/libusb \
-                -DLIBPTHREADSWIN32_PATH=$GITHUB_WORKSPACE\pthreads\Pre-built.2 \
-                -DFX3_SDK_PATH=$GITHUB_WORKSPACE\fx3sdk ..
+                -DLIBPTHREADSWIN32_PATH=$GITHUB_WORKSPACE/pthreads/Pre-built.2 \
+                -DFX3_SDK_PATH=$GITHUB_WORKSPACE/fx3sdk ..
 
       - name: HackRF build
         run: |
