@@ -64,4 +64,3 @@ jobs:
                 -DTHREADS_PTHREADS_WIN32_LIBRARY=$GITHUB_WORKSPACE/pthreads/Pre-built.2/lib/$ARCH/pthreadVC2.lib ..
           cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
           cmake --install . --config Release --prefix $GITHUB_WORKSPACE/dist
-          ls $GITHUB_WORKSPACE/dist
