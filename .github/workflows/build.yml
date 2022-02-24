@@ -81,23 +81,24 @@ jobs:
       - name: BladeRF patch
         run: |
           import os
+          
           os.chdir("bladeRF/host")
           for root, dirs, files in os.walk(os.path.realpath(os.curdir)):
-            for file in files:
-                if not file.endswith(".c") and not file.endswith(".h"):
-                    continue
-
-                fname = os.path.join(root, file)
-                with open(fname, "r") as f:
-                    lines = f.readlines()
-
-                with open(fname, "w") as f:
-                    for i, line in enumerate(lines):
-                        if line.startswith("#include <pthread.h>") \
-                                and not lines[i + 1].startswith("#define HAVE_STRUCT_TIMESPEC 1"):
-                            print("Patching {}".format(fname))
-                            f.write("#define HAVE_STRUCT_TIMESPEC 1\n")
-                        f.write(line)
+              for file in files:
+                  if not file.endswith(".c") and not file.endswith(".h"):
+                      continue
+          
+                  fname = os.path.join(root, file)
+                  with open(fname, "r") as f:
+                      lines = f.readlines()
+          
+                  with open(fname, "w") as f:
+                      for i, line in enumerate(lines):
+                          if line.startswith("#include <pthread.h>") and not lines[i + 1].startswith(
+                                  "#define HAVE_STRUCT_TIMESPEC 1"):
+                              print("Patching {}".format(fname))
+                              f.write("#define HAVE_STRUCT_TIMESPEC 1\n")
+                          f.write(line)
         shell: python
 
       - name: BladeRF build
