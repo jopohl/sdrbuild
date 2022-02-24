@@ -80,6 +80,7 @@ jobs:
                 -DLIBUSB_PATH=$GITHUB_WORKSPACE/libusb \
                 -DLIBUSB_LIBRARY_PATH_SUFFIX=VS2019/MS$ARCH_NUM/Release/lib \
                 -DLIBPTHREADSWIN32_PATH=$GITHUB_WORKSPACE/pthreads/Pre-built.2 \
+                -DLIBUSB_SKIP_VERSION_CHECK=Yes \
                 -DENABLE_BACKEND_LIBUSB=ON ..
 
       - name: HackRF build
