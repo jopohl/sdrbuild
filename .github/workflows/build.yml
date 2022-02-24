@@ -6,13 +6,17 @@ on:
   pull_request:
     branches: [ master ]
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [windows-2019]
-        architecture: [x64, x86]
+        architecture: [x86, x64]
 
     steps:
       - run: choco install wget --no-progress
@@ -21,12 +25,29 @@ jobs:
           mkdir libusb && cd libusb
           wget https://github.com/libusb/libusb/releases/download/v1.0.25/libusb-1.0.25.7z
           7z x libusb-1.0.25.7z
-        shell: bash
+          ls $GITHUB_WORKSPACE/libusb
 
       - name: Setup pthreads
         run: |
           mkdir pthreads && cd pthreads
           wget https://www.mirrorservice.org/sites/sourceware.org/pub/pthreads-win32/pthreads-w32-2-9-1-release.zip
           7z x pthreads-w32-2-9-1-release.zip
-          ls $GITHUB_WORKSPACE
-        shell: bash
+          ls $GITHUB_WORKSPACE/pthreads
+
+      - name: Setup FFTW
+        run: |
+          mkdir fftw && cd fftw
+          if [[ $ARCH=="x64" ]]
+          then
+            wget https://fftw.org/pub/fftw/fftw-3.3.5-dll64.zip
+            7z x fftw-3.3.5-dll64.zip
+          else
+            wget https://fftw.org/pub/fftw/fftw-3.3.5-dll32.zip
+            7z x fftw-3.3.5-dll32.zip
+          fi
+          lib /machine:$ARCH /def:libfftw3-3.def
+          lib /machine:$ARCH /def:libfftw3f-3.def
+          lib /machine:$ARCH /def:libfftw3l-3.def
+          ls $GITHUB_WORKSPACE/fftw
+        env:
+          ARCH: ${{ matrix.architecture }}
