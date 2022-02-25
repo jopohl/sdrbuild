@@ -61,7 +61,7 @@ jobs:
         run: |
           git clone https://github.com/myriadrf/LimeSuite && cd LimeSuite
           git checkout stable
-          mkdir build && cd build
+          mkdir builddir && cd builddir
           cmake -DENABLE_GUI=OFF -DCMAKE_BUILD_TYPE=Release -DFX3_SDK_PATH=$GITHUB_WORKSPACE/fx3sdk ..
           cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
           cmake --install . --config Release --prefix $GITHUB_WORKSPACE/dist
