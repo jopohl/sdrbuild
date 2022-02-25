@@ -131,6 +131,15 @@ jobs:
           cp app/API/inc/* ../dist/include
           cp app/API/$ARCH/* ../dist
 
+      - name: UHD download
+        run: |
+          mkdir uhd && cd uhd
+          wget -O uhd.exe https://files.ettus.com/binaries/uhd/latest_release/4.1.0.5/Windows-10-x64/uhd_4.1.0.5-release_Win$ARCH_VS2019.exe
+          7z x uhd.exe
+          cp bin/uhd.dll ../dist
+          cp lib/uhd.lib ../dist
+          cp -r include/* ../dist/include/
+
       - name: Package
         run: |
           mv dist/lib/* dist/
