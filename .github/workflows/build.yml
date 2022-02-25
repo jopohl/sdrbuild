@@ -74,7 +74,7 @@ jobs:
           wget https://www.nuand.com/windows_installers/bladeRF-win-installer-2021.03.exe
           innoextract bladeRF-win-installer-2021.03.exe -d bladerf
           mkdir -p dist/include
-          cp bladerf/app/include/* /dist/include
+          cp bladerf/app/include/* dist/include
           cp bladerf/app/$ARCH/* dist
           ls $GITHUB_WORKSPACE/dist
 
