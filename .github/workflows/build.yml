@@ -122,3 +122,15 @@ jobs:
           7z x Windows-VS-16-2019-$CMAKE_ARCH.zip > /dev/null
           cp Windows-VS-16-2019-$CMAKE_ARCH/* dist/
           ls $GITHUB_WORKSPACE/dist
+
+      - name: Package
+        run: |
+          mv dist/lib/* dist/
+          mv dist/bin/* dist/
+          rm -rf dist/bin dist/lib
+          rm dist/*.exe
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: win-${{ matrix.architecture }}
+          path: dist
