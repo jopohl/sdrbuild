@@ -143,5 +143,6 @@ jobs:
       - name: PlutoSDR download
         run: |
           wget https://github.com/analogdevicesinc/libiio/releases/download/v0.23/Windows-VS-16-2019-$CMAKE_ARCH.zip
-          7z x Windows-VS-16-2019-$CMAKE_ARCH.zip -odist > /dev/null
+          7z x Windows-VS-16-2019-$CMAKE_ARCH.zip > /dev/null
+          cp Windows-VS-16-2019-$CMAKE_ARCH/* dist/
           ls $GITHUB_WORKSPACE/dist
