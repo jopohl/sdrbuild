@@ -27,16 +27,15 @@ jobs:
 
       - name: Setup libusb
         run: |
-          mkdir libusb && cd libusb
           wget -nv https://github.com/libusb/libusb/releases/download/v1.0.25/libusb-1.0.25.7z
-          7z x libusb-1.0.25.7z > /dev/null
+          7z x libusb-1.0.25.7z -olibusb > /dev/null
           ls $GITHUB_WORKSPACE/libusb
 
       - name: Setup pthreads
         run: |
           mkdir pthreads && cd pthreads
           wget -nv https://www.mirrorservice.org/sites/sourceware.org/pub/pthreads-win32/pthreads-w32-2-9-1-release.zip
-          7z x pthreads-w32-2-9-1-release.zip
+          7z x pthreads-w32-2-9-1-release.zip > /dev/null
           ls $GITHUB_WORKSPACE/pthreads
 
       - uses: ilammy/msvc-dev-cmd@v1
@@ -47,7 +46,7 @@ jobs:
         run: |
           mkdir fftw && cd fftw
           wget -nv https://fftw.org/pub/fftw/fftw-3.3.5-dll$ARCH_NUM.zip
-          7z x fftw-3.3.5-dll$ARCH_NUM.zip
+          7z x fftw-3.3.5-dll$ARCH_NUM.zip > /dev/null
           lib /machine:$ARCH /def:libfftw3-3.def
           lib /machine:$ARCH /def:libfftw3f-3.def
           lib /machine:$ARCH /def:libfftw3l-3.def
@@ -57,7 +56,7 @@ jobs:
         run: |
           mkdir fx3sdk && cd fx3sdk
           wget http://downloads.myriadrf.org/project/limesuite/appveyor/FX3SDK.zip
-          7z x FX3SDK.zip
+          7z x FX3SDK.zip > /dev/null
           ls $GITHUB_WORKSPACE/fx3sdk
 
       - name: AirSpy build
