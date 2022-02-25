@@ -63,7 +63,7 @@ jobs:
           mkdir builddir && cd builddir
           cmake -DENABLE_GUI=OFF -DTREAT_WARNINGS_AS_ERRORS=OFF -DCMAKE_BUILD_TYPE=Release -DFX3_SDK_PATH=$GITHUB_WORKSPACE/fx3sdk ..
           cmake --build . --parallel $NUMBER_OF_PROCESSORS
-          cmake --install .--prefix $GITHUB_WORKSPACE/dist
+          cmake --install . --prefix $GITHUB_WORKSPACE/dist
 
       - name: AirSpy build
         run: |
