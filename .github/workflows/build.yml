@@ -123,6 +123,14 @@ jobs:
           cp Windows-VS-16-2019-$CMAKE_ARCH/* dist/
           ls $GITHUB_WORKSPACE/dist
 
+      - name: SDRPlay download
+        run: |
+          mkdir sdrplay && cd sdrplay
+          wget https://www.sdrplay.com/software/SDRplay_RSP_API-Windows-2.13.1.exe
+          innoextract SDRplay_RSP_API-Windows-2.13.1.exe
+          cp app/API/inc/* ../dist/include
+          cp app/API/$ARCH/ ../dist
+
       - name: Package
         run: |
           mv dist/lib/* dist/
