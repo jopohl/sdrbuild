@@ -33,9 +33,8 @@ jobs:
 
       - name: Setup pthreads
         run: |
-          mkdir pthreads && cd pthreads
           wget -nv https://www.mirrorservice.org/sites/sourceware.org/pub/pthreads-win32/pthreads-w32-2-9-1-release.zip
-          7z x pthreads-w32-2-9-1-release.zip > /dev/null
+          7z x pthreads-w32-2-9-1-release.zip -opthreads > /dev/null
           ls $GITHUB_WORKSPACE/pthreads
 
       - uses: ilammy/msvc-dev-cmd@v1
@@ -44,9 +43,9 @@ jobs:
 
       - name: Setup FFTW
         run: |
-          mkdir fftw && cd fftw
           wget -nv https://fftw.org/pub/fftw/fftw-3.3.5-dll$ARCH_NUM.zip
-          7z x fftw-3.3.5-dll$ARCH_NUM.zip > /dev/null
+          7z x fftw-3.3.5-dll$ARCH_NUM.zip -offtw > /dev/null
+          cd fftw
           lib /machine:$ARCH /def:libfftw3-3.def
           lib /machine:$ARCH /def:libfftw3f-3.def
           lib /machine:$ARCH /def:libfftw3l-3.def
@@ -54,9 +53,8 @@ jobs:
 
       - name: Setup FX3SDK
         run: |
-          mkdir fx3sdk && cd fx3sdk
           wget http://downloads.myriadrf.org/project/limesuite/appveyor/FX3SDK.zip
-          7z x FX3SDK.zip > /dev/null
+          7z x FX3SDK.zip -ofx3sdk > /dev/null
           ls $GITHUB_WORKSPACE/fx3sdk
 
       - name: AirSpy build
@@ -141,6 +139,3 @@ jobs:
                 -DTHREADS_PTHREADS_LIBRARY=$GITHUB_WORKSPACE/pthreads/Pre-built.2/lib/$ARCH/pthreadVC2.lib ..
           cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
           cmake --install . --config Release --prefix $GITHUB_WORKSPACE/dist
-
-
-# how to make 7z less verbose: https://github.com/myriadrf/LimeSuite/blob/master/appveyor.yml
