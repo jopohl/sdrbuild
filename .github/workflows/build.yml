@@ -53,13 +53,13 @@ jobs:
 
       - name: Setup FX3SDK
         run: |
-          wget http://downloads.myriadrf.org/project/limesuite/appveyor/FX3SDK.zip
+          wget -nv http://downloads.myriadrf.org/project/limesuite/appveyor/FX3SDK.zip
           7z x FX3SDK.zip -ofx3sdk > /dev/null
           ls $GITHUB_WORKSPACE/fx3sdk
 
       - name: AirSpy build
         run: |
-          git clone --depth 1 https://github.com/jopohl/airspyone_host
+          git clone --depth 1 https://github.com/airspy/airspyone_host
           mkdir airspyone_host/build && cd airspyone_host/build
           cmake -A $CMAKE_ARCH \
                 -DLIBUSB_LIBRARIES=$GITHUB_WORKSPACE/libusb/VS2019/MS$ARCH_NUM/Release/lib/libusb-1.0.lib \
@@ -71,7 +71,7 @@ jobs:
 
       - name: BladeRF download
         run: |
-          wget https://www.nuand.com/windows_installers/bladeRF-win-installer-2021.03.exe
+          wget -nv https://www.nuand.com/windows_installers/bladeRF-win-installer-2021.03.exe
           innoextract bladeRF-win-installer-2021.03.exe -d bladerf
           mkdir -p dist/include
           cp bladerf/app/include/* dist/include
