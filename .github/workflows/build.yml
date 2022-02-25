@@ -66,8 +66,8 @@ jobs:
                 -DENABLE_GUI=OFF \
                 -DFX3_SDK_PATH=$GITHUB_WORKSPACE/fx3sdk \
                 ..
-          cmake --build . --parallel $NUMBER_OF_PROCESSORS
-          cmake --install . --prefix $GITHUB_WORKSPACE/dist
+          cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
+          cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
 
       - name: AirSpy build
         run: |
@@ -78,8 +78,8 @@ jobs:
                 -DLIBUSB_INCLUDE_DIR=$GITHUB_WORKSPACE/libusb/include/libusb-1.0 \
                 -DTHREADS_PTHREADS_INCLUDE_DIR=$GITHUB_WORKSPACE/pthreads/Pre-built.2/include \
                 -DTHREADS_PTHREADS_WIN32_LIBRARY=$GITHUB_WORKSPACE/pthreads/Pre-built.2/lib/$ARCH/pthreadVC2.lib ..
-          cmake --build . --parallel $NUMBER_OF_PROCESSORS
-          cmake --install . --prefix $GITHUB_WORKSPACE/dist
+          cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
+          cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
 
       - name: BladeRF download
         run: |
@@ -101,8 +101,8 @@ jobs:
                 -DTHREADS_PTHREADS_WIN32_LIBRARY=$GITHUB_WORKSPACE/pthreads/Pre-built.2/lib/$ARCH/pthreadVC2.lib \
                 -DFFTW_INCLUDES=$GITHUB_WORKSPACE/fftw \
                 -DFFTW_LIBRARIES=$GITHUB_WORKSPACE/fftw/libfftw3f-3.lib ..
-          cmake --build . --parallel $NUMBER_OF_PROCESSORS
-          cmake --install . --prefix $GITHUB_WORKSPACE/dist
+          cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
+          cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
 
       - name: RTL-SDR build
         run: |
@@ -113,8 +113,8 @@ jobs:
                 -DLIBUSB_INCLUDE_DIRS=$GITHUB_WORKSPACE/libusb/include/libusb-1.0 \
                 -DTHREADS_PTHREADS_INCLUDE_DIR=$GITHUB_WORKSPACE/pthreads/Pre-built.2/include \
                 -DTHREADS_PTHREADS_LIBRARY=$GITHUB_WORKSPACE/pthreads/Pre-built.2/lib/$ARCH/pthreadVC2.lib ..
-          cmake --build . --parallel $NUMBER_OF_PROCESSORS
-          cmake --install . --prefix $GITHUB_WORKSPACE/dist
+          cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
+          cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
 
       - name: PlutoSDR download
         run: |
