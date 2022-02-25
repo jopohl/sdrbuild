@@ -129,7 +129,7 @@ jobs:
           wget https://www.sdrplay.com/software/SDRplay_RSP_API-Windows-2.13.1.exe
           innoextract SDRplay_RSP_API-Windows-2.13.1.exe
           cp app/API/inc/* ../dist/include
-          cp app/API/$ARCH/ ../dist
+          cp app/API/$ARCH/* ../dist
 
       - name: Package
         run: |
