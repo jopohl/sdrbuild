@@ -58,6 +58,13 @@ jobs:
           mkdir fx3sdk && cd fx3sdk
           wget http://downloads.myriadrf.org/project/limesuite/appveyor/FX3SDK.zip
           7z x FX3SDK.zip
+          wget https://community.infineon.com/gfawx74859/attachments/gfawx74859/KnowledgeBaseArticles/918/1/Drivers.zip
+          mkdir driver && cd driver
+          7z x Drivers.zip
+          mv Drivers bin
+          cd bin
+          mv Win10 win10
+          mv Win8.1 win81
           ls $GITHUB_WORKSPACE/fx3sdk
 
       - name: AirSpy build
