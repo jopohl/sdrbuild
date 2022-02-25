@@ -144,7 +144,7 @@ jobs:
         run: |
           mv dist/lib/* dist/
           mv dist/bin/* dist/
-          rm -rf dist/bin dist/lib
+          rm -rf dist/bin dist/lib dist/cmake dist/pkgconfig
           rm dist/*.exe
 
       - uses: actions/upload-artifact@v2
