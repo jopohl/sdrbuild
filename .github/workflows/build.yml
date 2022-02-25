@@ -57,17 +57,29 @@ jobs:
           7z x FX3SDK.zip -ofx3sdk > /dev/null
           ls $GITHUB_WORKSPACE/fx3sdk
 
+      - name: Lime build
+        run: |
+          git clone https://github.com/myriadrf/LimeSuite && cd LimeSuite
+          mkdir builddir && cd builddir
+          cmake -A $CMAKE_ARCH \
+                -DCMAKE_BUILD_TYPE=Release \
+                -DENABLE_GUI=OFF \
+                -DFX3_SDK_PATH=$GITHUB_WORKSPACE/fx3sdk \
+                ..
+          cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
+          cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
+
       - name: AirSpy build
         run: |
           git clone --depth 1 https://github.com/airspy/airspyone_host
           mkdir airspyone_host/build && cd airspyone_host/build
-          cmake -A $CMAKE_ARCH \
+          cmake -A $CMAKE_ARCH -DCMAKE_BUILD_TYPE=Release \
                 -DLIBUSB_LIBRARIES=$GITHUB_WORKSPACE/libusb/VS2019/MS$ARCH_NUM/Release/lib/libusb-1.0.lib \
                 -DLIBUSB_INCLUDE_DIR=$GITHUB_WORKSPACE/libusb/include/libusb-1.0 \
                 -DTHREADS_PTHREADS_INCLUDE_DIR=$GITHUB_WORKSPACE/pthreads/Pre-built.2/include \
                 -DTHREADS_PTHREADS_WIN32_LIBRARY=$GITHUB_WORKSPACE/pthreads/Pre-built.2/lib/$ARCH/pthreadVC2.lib ..
           cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
-          cmake --install . --config Release --prefix $GITHUB_WORKSPACE/dist
+          cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
 
       - name: BladeRF download
         run: |
@@ -82,7 +94,7 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/greatscottgadgets/hackrf
           mkdir hackrf/host/build && cd hackrf/host/build
-          cmake -A $CMAKE_ARCH \
+          cmake -A $CMAKE_ARCH -DCMAKE_BUILD_TYPE=Release\
                 -DLIBUSB_LIBRARIES=$GITHUB_WORKSPACE/libusb/VS2019/MS$ARCH_NUM/Release/lib/libusb-1.0.lib \
                 -DLIBUSB_INCLUDE_DIR=$GITHUB_WORKSPACE/libusb/include/libusb-1.0 \
                 -DTHREADS_PTHREADS_INCLUDE_DIR=$GITHUB_WORKSPACE/pthreads/Pre-built.2/include \
@@ -90,19 +102,19 @@ jobs:
                 -DFFTW_INCLUDES=$GITHUB_WORKSPACE/fftw \
                 -DFFTW_LIBRARIES=$GITHUB_WORKSPACE/fftw/libfftw3f-3.lib ..
           cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
-          cmake --install . --config Release --prefix $GITHUB_WORKSPACE/dist
+          cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
 
       - name: RTL-SDR build
         run: |
           git clone --depth 1 https://github.com/osmocom/rtl-sdr
           mkdir rtl-sdr/build && cd rtl-sdr/build
-          cmake -A $CMAKE_ARCH \
+          cmake -A $CMAKE_ARCH -DCMAKE_BUILD_TYPE=Release\
                 -DLIBUSB_LIBRARIES=$GITHUB_WORKSPACE/libusb/VS2019/MS$ARCH_NUM/Release/lib/libusb-1.0.lib \
                 -DLIBUSB_INCLUDE_DIRS=$GITHUB_WORKSPACE/libusb/include/libusb-1.0 \
                 -DTHREADS_PTHREADS_INCLUDE_DIR=$GITHUB_WORKSPACE/pthreads/Pre-built.2/include \
                 -DTHREADS_PTHREADS_LIBRARY=$GITHUB_WORKSPACE/pthreads/Pre-built.2/lib/$ARCH/pthreadVC2.lib ..
           cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
-          cmake --install . --config Release --prefix $GITHUB_WORKSPACE/dist
+          cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
 
       - name: PlutoSDR download
         run: |
