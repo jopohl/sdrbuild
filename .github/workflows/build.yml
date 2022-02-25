@@ -58,13 +58,6 @@ jobs:
           mkdir fx3sdk && cd fx3sdk
           wget http://downloads.myriadrf.org/project/limesuite/appveyor/FX3SDK.zip
           7z x FX3SDK.zip
-          mkdir driver && cd driver
-          wget https://community.infineon.com/gfawx74859/attachments/gfawx74859/KnowledgeBaseArticles/918/1/Drivers.zip
-          7z x Drivers.zip
-          mv Drivers bin
-          cd bin
-          mv Win10 win10
-          mv Win8.1 win81
           ls $GITHUB_WORKSPACE/fx3sdk
 
       - name: AirSpy build
@@ -120,7 +113,6 @@ jobs:
                 -DLIBUSB_LIBRARY_PATH_SUFFIX=VS2019/MS$ARCH_NUM/Release/dll \
                 -DLIBUSB_FOUND=true \
                 -DTREAT_WARNINGS_AS_ERRORS=OFF \
-                -DFX3_SDK_PATH=$GITHUB_WORKSPACE/fx3sdk \
                 -DENABLE_BACKEND_LIBUSB=ON ..
           cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
           cmake --install . --config Release --prefix $GITHUB_WORKSPACE/dist
@@ -150,3 +142,6 @@ jobs:
                 -DTHREADS_PTHREADS_LIBRARY=$GITHUB_WORKSPACE/pthreads/Pre-built.2/lib/$ARCH/pthreadVC2.lib ..
           cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
           cmake --install . --config Release --prefix $GITHUB_WORKSPACE/dist
+
+
+# how to make 7z less verbose: https://github.com/myriadrf/LimeSuite/blob/master/appveyor.yml
