@@ -19,6 +19,11 @@ jobs:
           brew update
           brew install airspy hackrf librtlsdr libbladerf limesuite libiio portaudio uhd
 
+      - name: Install SDRPlay
+        run: |
+          wget -nv https://www.sdrplay.com/software/SDRplay_RSP_API-MacOSX-2.13.2.pkg
+          installer -pkg SDRplay_RSP_API-MacOSX-2.13.2.pkg
+
       - run: python3 -m pip install -r data/requirements.txt
         working-directory: urh
 
