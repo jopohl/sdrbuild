@@ -160,3 +160,16 @@ jobs:
         with:
           name: win-${{ matrix.architecture }}
           path: dist
+
+      - name: Create zip
+        run: 7z a -tzip win-$ARCH.zip "./dist/*"
+
+      - uses: ncipollo/release-action@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          artifacts: "win-*.zip"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          allowUpdates: true
+          bodyFile: "release_notes.md"
+          omitBodyDuringUpdate: true
+          omitNameDuringUpdate: true
