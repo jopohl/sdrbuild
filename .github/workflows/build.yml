@@ -57,29 +57,18 @@ jobs:
           7z x FX3SDK.zip -ofx3sdk > /dev/null
           ls $GITHUB_WORKSPACE/fx3sdk
 
-      - name: Lime build
-        run: |
-          git clone https://github.com/myriadrf/LimeSuite && cd LimeSuite
-          mkdir builddir && cd builddir
-          cmake -A $CMAKE_ARCH \
-                -DCMAKE_BUILD_TYPE=Release \
-                -DENABLE_GUI=OFF \
-                -DFX3_SDK_PATH=$GITHUB_WORKSPACE/fx3sdk \
-                ..
-          cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
-          cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
-
       - name: AirSpy build
         run: |
           git clone --depth 1 https://github.com/airspy/airspyone_host
           mkdir airspyone_host/build && cd airspyone_host/build
           cmake -A $CMAKE_ARCH -DCMAKE_BUILD_TYPE=Release \
                 -DLIBUSB_LIBRARIES=$GITHUB_WORKSPACE/libusb/VS2019/MS$ARCH_NUM/Release/lib/libusb-1.0.lib \
-                -DLIBUSB_INCLUDE_DIR=$GITHUB_WORKSPACE/libusb/include/libusb-1.0 \
+                -DLIBUSB_INCLUDE_DIR=$GITHUB_WORKSPACE/libusb/include/libusb-1.0 \gn
                 -DTHREADS_PTHREADS_INCLUDE_DIR=$GITHUB_WORKSPACE/pthreads/Pre-built.2/include \
                 -DTHREADS_PTHREADS_WIN32_LIBRARY=$GITHUB_WORKSPACE/pthreads/Pre-built.2/lib/$ARCH/pthreadVC2.lib ..
           cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
           cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
+          echo "AirSpy: `git show --format='%h (%s, %as)' --no-patch`" >> $GITHUB_WORKSPACE/release_notes.md
 
       - name: BladeRF download
         run: |
@@ -87,7 +76,7 @@ jobs:
           innoextract bladerf.exe -d bladerf
           cp bladerf/app/include/* dist/include
           cp bladerf/app/$ARCH/* dist
-          ls $GITHUB_WORKSPACE/dist
+          echo "BladeRF: 2021.03" >> $GITHUB_WORKSPACE/release_notes.md
 
       - name: HackRF build
         run: |
@@ -102,6 +91,22 @@ jobs:
                 -DFFTW_LIBRARIES=$GITHUB_WORKSPACE/fftw/libfftw3f-3.lib ..
           cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
           cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
+          echo "HackRF: `git show --format='%h (%s, %as)' --no-patch`" >> $GITHUB_WORKSPACE/release_notes.md
+
+      - name: LimeSuite build
+        run: |
+          git clone https://github.com/myriadrf/LimeSuite && cd LimeSuite
+          git show --format="%h (%s, %as)" --no-patch
+          mkdir builddir && cd builddir
+          cmake -A $CMAKE_ARCH \
+                -DCMAKE_BUILD_TYPE=Release \
+                -DENABLE_GUI=OFF \
+                -DFX3_SDK_PATH=$GITHUB_WORKSPACE/fx3sdk \
+                ..
+          cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
+          cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
+          echo "LimeSuite: `git show --format='%h (%s, %as)' --no-patch`" >> $GITHUB_WORKSPACE/release_notes.md
+
 
       - name: RTL-SDR build
         run: |
@@ -114,6 +119,7 @@ jobs:
                 -DTHREADS_PTHREADS_LIBRARY=$GITHUB_WORKSPACE/pthreads/Pre-built.2/lib/$ARCH/pthreadVC2.lib ..
           cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
           cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
+          echo "RTL-SDR: `git show --format='%h (%s, %as)' --no-patch`" >> $GITHUB_WORKSPACE/release_notes.md
 
       - name: PlutoSDR download
         run: |
@@ -121,7 +127,7 @@ jobs:
           wget -O iio.zip https://github.com/analogdevicesinc/libiio/releases/download/v0.23/Windows-VS-16-2019-$CMAKE_ARCH.zip
           7z x iio.zip > /dev/null
           cp Windows-VS-16-2019-$CMAKE_ARCH/* ../dist/
-          ls $GITHUB_WORKSPACE/dist
+          echo "IIO: v.0.23" >> $GITHUB_WORKSPACE/release_notes.md
 
       - name: SDRPlay download
         run: |
@@ -130,6 +136,7 @@ jobs:
           innoextract sdrplay.exe
           cp app/API/inc/* ../dist/include
           cp app/API/$ARCH/* ../dist
+          echo "SDRPlay: 2.13.1" >> $GITHUB_WORKSPACE/release_notes.md
 
       - name: UHD download
         run: |
@@ -139,6 +146,8 @@ jobs:
           cp bin/uhd.dll ../dist
           cp lib/uhd.lib ../dist
           cp -r include/* ../dist/include/
+          echo "UHD: 4.1.0.5" >> $GITHUB_WORKSPACE/release_notes.md
+          cat $GITHUB_WORKSPACE/release_notes.md
 
       - name: Package
         run: |
