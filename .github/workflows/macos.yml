@@ -22,7 +22,12 @@ jobs:
       - run: python3 -m pip install -r data/requirements.txt
         working-directory: urh
 
-      - run: python3 src/urh/cythonext/build.py
+      - name: Build extensions
+        run: |
+          export LIBRARY_PATH="$LIBRARY_PATH:$(brew --prefix)/lib"
+          export C_INCLUDE_PATH="$C_INCLUDE_PATH:$(brew --prefix)/include"
+          export CPP_INCLUDE_PATH="$CPP_INCLUDE_PATH:$(brew --prefix)/include"
+          python3 src/urh/cythonext/build.py
         working-directory: urh
 
       - name: Check native backends
