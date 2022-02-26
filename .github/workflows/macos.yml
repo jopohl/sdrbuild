@@ -13,11 +13,11 @@ jobs:
     steps:
       - run: git clone https://github.com/jopohl/urh && cd urh && git checkout macosdebug
 
-#      - name: Install SDR libs
-#        run: |
-#          brew tap pothosware/homebrew-pothos
-#          brew update
-#          brew install airspy hackrf librtlsdr libbladerf limesuite libiio portaudio uhd
+      - name: Install SDR libs
+        run: |
+          brew tap pothosware/homebrew-pothos
+          brew update
+          brew install airspy hackrf librtlsdr libbladerf limesuite libiio portaudio uhd
 
       - name: Install SDRPlay
         run: |
@@ -28,7 +28,7 @@ jobs:
         working-directory: urh
 
       - name: Build extensions
-        run: python3 src/urh/cythonext/build.py --with-plutosdr
+        run: python3 setup.py build_ext --inplace --with-plutosdr
         working-directory: urh
 
       - name: Check native backends
