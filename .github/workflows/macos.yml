@@ -17,16 +17,16 @@ jobs:
         run: |
           brew tap pothosware/homebrew-pothos
           brew update
-          HOMEBREW_NO_AUTO_UPDATE=1 brew install airspy hackrf librtlsdr libbladerf limesuite libiio portaudio uhd
+          brew install airspy hackrf librtlsdr libbladerf limesuite libiio portaudio uhd
 
-      - run: pip install -r data/requirements.txt
+      - run: python3 -m pip install -r data/requirements.txt
         working-directory: urh
 
-      - run: python src/urh/cythonext/build.py
+      - run: python3 src/urh/cythonext/build.py
         working-directory: urh
 
       - name: Check native backends
         run: |
-          pip install .
-          python data/check_native_backends.py
+          python3 -m pip install .
+          python3 data/check_native_backends.py
         working-directory: urh
