@@ -63,7 +63,7 @@ jobs:
           mkdir airspyone_host/build && cd airspyone_host/build
           cmake -A $CMAKE_ARCH -DCMAKE_BUILD_TYPE=Release \
                 -DLIBUSB_LIBRARIES=$GITHUB_WORKSPACE/libusb/VS2019/MS$ARCH_NUM/Release/lib/libusb-1.0.lib \
-                -DLIBUSB_INCLUDE_DIR=$GITHUB_WORKSPACE/libusb/include/libusb-1.0 \gn
+                -DLIBUSB_INCLUDE_DIR=$GITHUB_WORKSPACE/libusb/include/libusb-1.0 \
                 -DTHREADS_PTHREADS_INCLUDE_DIR=$GITHUB_WORKSPACE/pthreads/Pre-built.2/include \
                 -DTHREADS_PTHREADS_WIN32_LIBRARY=$GITHUB_WORKSPACE/pthreads/Pre-built.2/lib/$ARCH/pthreadVC2.lib ..
           cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
