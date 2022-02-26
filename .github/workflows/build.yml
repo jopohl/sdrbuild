@@ -68,15 +68,15 @@ jobs:
                 -DTHREADS_PTHREADS_WIN32_LIBRARY=$GITHUB_WORKSPACE/pthreads/Pre-built.2/lib/$ARCH/pthreadVC2.lib ..
           cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
           cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
-          echo "AirSpy: `git show --format='%h (%s, %as)' --no-patch`" >> $GITHUB_WORKSPACE/release_notes.md
+          echo "* AirSpy: `git show --format='%h (%s, %as)' --no-patch`" >> $GITHUB_WORKSPACE/release_notes.md
 
       - name: BladeRF download
         run: |
-          wget -O bladerf.exe -nv https://www.nuand.com/windows_installers/bladeRF-win-installer-2021.03.exe
+          wget -nv -O bladerf.exe -nv https://www.nuand.com/windows_installers/bladeRF-win-installer-2021.03.exe
           innoextract bladerf.exe -d bladerf
           cp bladerf/app/include/* dist/include
           cp bladerf/app/$ARCH/* dist
-          echo "BladeRF: 2021.03" >> $GITHUB_WORKSPACE/release_notes.md
+          echo "* BladeRF: 2021.03" >> $GITHUB_WORKSPACE/release_notes.md
 
       - name: HackRF build
         run: |
@@ -91,7 +91,7 @@ jobs:
                 -DFFTW_LIBRARIES=$GITHUB_WORKSPACE/fftw/libfftw3f-3.lib ..
           cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
           cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
-          echo "HackRF: `git show --format='%h (%s, %as)' --no-patch`" >> $GITHUB_WORKSPACE/release_notes.md
+          echo "* HackRF: `git show --format='%h (%s, %as)' --no-patch`" >> $GITHUB_WORKSPACE/release_notes.md
 
       - name: LimeSuite build
         run: |
@@ -105,7 +105,7 @@ jobs:
                 ..
           cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
           cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
-          echo "LimeSuite: `git show --format='%h (%s, %as)' --no-patch`" >> $GITHUB_WORKSPACE/release_notes.md
+          echo "* LimeSuite: `git show --format='%h (%s, %as)' --no-patch`" >> $GITHUB_WORKSPACE/release_notes.md
 
 
       - name: RTL-SDR build
@@ -119,34 +119,34 @@ jobs:
                 -DTHREADS_PTHREADS_LIBRARY=$GITHUB_WORKSPACE/pthreads/Pre-built.2/lib/$ARCH/pthreadVC2.lib ..
           cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
           cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
-          echo "RTL-SDR: `git show --format='%h (%s, %as)' --no-patch`" >> $GITHUB_WORKSPACE/release_notes.md
+          echo "* RTL-SDR: `git show --format='%h (%s, %as)' --no-patch`" >> $GITHUB_WORKSPACE/release_notes.md
 
       - name: PlutoSDR download
         run: |
           mkdir iio && cd iio
-          wget -O iio.zip https://github.com/analogdevicesinc/libiio/releases/download/v0.23/Windows-VS-16-2019-$CMAKE_ARCH.zip
+          wget -nv -O iio.zip https://github.com/analogdevicesinc/libiio/releases/download/v0.23/Windows-VS-16-2019-$CMAKE_ARCH.zip
           7z x iio.zip > /dev/null
           cp Windows-VS-16-2019-$CMAKE_ARCH/* ../dist/
-          echo "IIO: v.0.23" >> $GITHUB_WORKSPACE/release_notes.md
+          echo "* IIO: 0.23" >> $GITHUB_WORKSPACE/release_notes.md
 
       - name: SDRPlay download
         run: |
           mkdir sdrplay && cd sdrplay
-          wget -O sdrplay.exe https://www.sdrplay.com/software/SDRplay_RSP_API-Windows-2.13.1.exe
+          wget -nv -O sdrplay.exe https://www.sdrplay.com/software/SDRplay_RSP_API-Windows-2.13.1.exe
           innoextract sdrplay.exe
           cp app/API/inc/* ../dist/include
           cp app/API/$ARCH/* ../dist
-          echo "SDRPlay: 2.13.1" >> $GITHUB_WORKSPACE/release_notes.md
+          echo "* SDRPlay: 2.13.1" >> $GITHUB_WORKSPACE/release_notes.md
 
       - name: UHD download
         run: |
           mkdir uhd && cd uhd
-          wget -O uhd.exe https://files.ettus.com/binaries/uhd/latest_release/4.1.0.5/Windows-10-x64/uhd_4.1.0.5-release_Win${ARCH}_VS2019.exe
+          wget -nv -O uhd.exe https://files.ettus.com/binaries/uhd/latest_release/4.1.0.5/Windows-10-x64/uhd_4.1.0.5-release_Win${ARCH}_VS2019.exe
           7z x uhd.exe
           cp bin/uhd.dll ../dist
           cp lib/uhd.lib ../dist
           cp -r include/* ../dist/include/
-          echo "UHD: 4.1.0.5" >> $GITHUB_WORKSPACE/release_notes.md
+          echo "* UHD: 4.1.0.5" >> $GITHUB_WORKSPACE/release_notes.md
           cat $GITHUB_WORKSPACE/release_notes.md
 
       - name: Package
