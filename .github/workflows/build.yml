@@ -57,18 +57,6 @@ jobs:
           7z x FX3SDK.zip -ofx3sdk > /dev/null
           ls $GITHUB_WORKSPACE/fx3sdk
 
-      - name: Lime build
-        run: |
-          git clone https://github.com/myriadrf/LimeSuite && cd LimeSuite
-          mkdir builddir && cd builddir
-          cmake -A $CMAKE_ARCH \
-                -DCMAKE_BUILD_TYPE=Release \
-                -DENABLE_GUI=OFF \
-                -DFX3_SDK_PATH=$GITHUB_WORKSPACE/fx3sdk \
-                ..
-          cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
-          cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
-
       - name: AirSpy build
         run: |
           git clone --depth 1 https://github.com/airspy/airspyone_host
@@ -80,14 +68,15 @@ jobs:
                 -DTHREADS_PTHREADS_WIN32_LIBRARY=$GITHUB_WORKSPACE/pthreads/Pre-built.2/lib/$ARCH/pthreadVC2.lib ..
           cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
           cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
+          echo "* AirSpy: `git show --format='%h (%s, %as)' --no-patch`" >> $GITHUB_WORKSPACE/release_notes.md
 
       - name: BladeRF download
         run: |
-          wget -O bladerf.exe -nv https://www.nuand.com/windows_installers/bladeRF-win-installer-2021.03.exe
+          wget -nv -O bladerf.exe -nv https://www.nuand.com/windows_installers/bladeRF-win-installer-2021.03.exe
           innoextract bladerf.exe -d bladerf
           cp bladerf/app/include/* dist/include
           cp bladerf/app/$ARCH/* dist
-          ls $GITHUB_WORKSPACE/dist
+          echo "* BladeRF: 2021.03" >> $GITHUB_WORKSPACE/release_notes.md
 
       - name: HackRF build
         run: |
@@ -102,6 +91,22 @@ jobs:
                 -DFFTW_LIBRARIES=$GITHUB_WORKSPACE/fftw/libfftw3f-3.lib ..
           cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
           cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
+          echo "* HackRF: `git show --format='%h (%s, %as)' --no-patch`" >> $GITHUB_WORKSPACE/release_notes.md
+
+      - name: LimeSuite build
+        run: |
+          git clone https://github.com/myriadrf/LimeSuite && cd LimeSuite
+          git show --format="%h (%s, %as)" --no-patch
+          mkdir builddir && cd builddir
+          cmake -A $CMAKE_ARCH \
+                -DCMAKE_BUILD_TYPE=Release \
+                -DENABLE_GUI=OFF \
+                -DFX3_SDK_PATH=$GITHUB_WORKSPACE/fx3sdk \
+                ..
+          cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
+          cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
+          echo "* LimeSuite: `git show --format='%h (%s, %as)' --no-patch`" >> $GITHUB_WORKSPACE/release_notes.md
+
 
       - name: RTL-SDR build
         run: |
@@ -114,31 +119,35 @@ jobs:
                 -DTHREADS_PTHREADS_LIBRARY=$GITHUB_WORKSPACE/pthreads/Pre-built.2/lib/$ARCH/pthreadVC2.lib ..
           cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
           cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
+          echo "* RTL-SDR: `git show --format='%h (%s, %as)' --no-patch`" >> $GITHUB_WORKSPACE/release_notes.md
 
       - name: PlutoSDR download
         run: |
           mkdir iio && cd iio
-          wget -O iio.zip https://github.com/analogdevicesinc/libiio/releases/download/v0.23/Windows-VS-16-2019-$CMAKE_ARCH.zip
+          wget -nv -O iio.zip https://github.com/analogdevicesinc/libiio/releases/download/v0.23/Windows-VS-16-2019-$CMAKE_ARCH.zip
           7z x iio.zip > /dev/null
           cp Windows-VS-16-2019-$CMAKE_ARCH/* ../dist/
-          ls $GITHUB_WORKSPACE/dist
+          echo "* IIO: 0.23" >> $GITHUB_WORKSPACE/release_notes.md
 
       - name: SDRPlay download
         run: |
           mkdir sdrplay && cd sdrplay
-          wget -O sdrplay.exe https://www.sdrplay.com/software/SDRplay_RSP_API-Windows-2.13.1.exe
+          wget -nv -O sdrplay.exe https://www.sdrplay.com/software/SDRplay_RSP_API-Windows-2.13.1.exe
           innoextract sdrplay.exe
           cp app/API/inc/* ../dist/include
           cp app/API/$ARCH/* ../dist
+          echo "* SDRPlay: 2.13.1" >> $GITHUB_WORKSPACE/release_notes.md
 
       - name: UHD download
         run: |
           mkdir uhd && cd uhd
-          wget -O uhd.exe https://files.ettus.com/binaries/uhd/latest_release/4.1.0.5/Windows-10-x64/uhd_4.1.0.5-release_Win${ARCH}_VS2019.exe
+          wget -nv -O uhd.exe https://files.ettus.com/binaries/uhd/latest_release/4.1.0.5/Windows-10-x64/uhd_4.1.0.5-release_Win${ARCH}_VS2019.exe
           7z x uhd.exe
           cp bin/uhd.dll ../dist
           cp lib/uhd.lib ../dist
           cp -r include/* ../dist/include/
+          echo "* UHD: 4.1.0.5" >> $GITHUB_WORKSPACE/release_notes.md
+          cat $GITHUB_WORKSPACE/release_notes.md
 
       - name: Package
         run: |
@@ -151,3 +160,16 @@ jobs:
         with:
           name: win-${{ matrix.architecture }}
           path: dist
+
+      - name: Create zip
+        run: 7z a -tzip win-$ARCH.zip "./dist/*"
+
+      - uses: ncipollo/release-action@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          artifacts: "win-*.zip"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          allowUpdates: true
+          bodyFile: "release_notes.md"
+          omitBodyDuringUpdate: true
+          omitNameDuringUpdate: true
