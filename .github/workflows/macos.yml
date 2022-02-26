@@ -23,7 +23,7 @@ jobs:
         working-directory: urh
 
       - name: Build extensions
-        run: python3 src/urh/cythonext/build.py
+        run: python3 src/urh/cythonext/build.py --with-plutosdr
         working-directory: urh
 
       - name: Check native backends
