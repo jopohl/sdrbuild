@@ -26,7 +26,7 @@ jobs:
           ls -l /Library/Frameworks/iio.framework/Versions/Current
           ls -l /Library/Frameworks/iio.framework/Versions/0.23/iio
           file /Library/Frameworks/iio.framework/Versions/0.23/iio
-          cp /Library/Frameworks/iio.framework/Versions/0.23/iio /usr/local/lib
+          ln -s /Library/Frameworks/iio.framework/Versions/0.23/iio /usr/local/lib
           cp /Library/Frameworks/iio.framework/Versions/0.23/Headers/iio.h /usr/local/include
 
       - name: Install SDRPlay
