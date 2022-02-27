@@ -23,6 +23,7 @@ jobs:
       ARCH: ${{ matrix.architecture }}
       ARCH_NUM: "${{ matrix.architecture == 'x64' && '64' || '32' }}"
       CMAKE_ARCH: "${{ matrix.architecture == 'x64' && 'x64' || 'Win32' }}"
+      LONG_ARCH: "${{ matrix.architecture == 'x64' && 'x86_64' || 'x86' }}"
 
     steps:
       - run: choco install wget sed innoextract --no-progress
@@ -126,12 +127,16 @@ jobs:
       - name: PlutoSDR download
         run: |
           mkdir iio && cd iio
-          wget -nv -O iio.zip https://github.com/analogdevicesinc/libiio/releases/download/v0.21/libiio-0.21.g565bf68-Windows.zip
+          wget -nv -O iio.zip https://github.com/analogdevicesinc/libiio/releases/download/v0.23/Windows-VS-16-2019-$CMAKE_ARCH.zip
           7z x iio.zip > /dev/null
-          cp libiio-0.21.g565bf68/MS${ARCH_NUM}/* ../dist/
-          cp libiio-0.21.g565bf68/include/* ../dist/include
+          cp Windows-VS-16-2019-$CMAKE_ARCH/* ../dist/
           mv ../dist/libiio.lib ../dist/iio.lib
-          echo "* IIO: 0.21" >> $GITHUB_WORKSPACE/release_notes.md
+          mv ../dist/iio.h ../dist/include
+          mkdir libxml2 && cd libxml2
+          wget -nv -O libxml2.7z  https://www.zlatkovic.com/pub/libxml/64bit/libxml2-2.9.3-win32-${LONG_ARCH}.7z
+          7z x libxml2.7z > /dev/null
+          cp bin/libxml2-2.dll $GITHUB_WORKSPACE/dist
+          echo "* IIO: 0.23" >> $GITHUB_WORKSPACE/release_notes.md
 
       - name: SDRPlay download
         run: |
