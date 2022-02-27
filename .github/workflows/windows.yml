@@ -129,6 +129,7 @@ jobs:
           7z x iio.zip > /dev/null
           cp Windows-VS-16-2019-$CMAKE_ARCH/* ../dist/
           mv ../dist/libiio.lib ../dist/iio.lib
+          mv ../dist/iio.h ../dist/include
           echo "* IIO: 0.23" >> $GITHUB_WORKSPACE/release_notes.md
 
       - name: SDRPlay download
