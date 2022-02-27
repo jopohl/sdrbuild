@@ -132,10 +132,15 @@ jobs:
           cp Windows-VS-16-2019-$CMAKE_ARCH/* ../dist/
           mv ../dist/libiio.lib ../dist/iio.lib
           mv ../dist/iio.h ../dist/include
-          mkdir libxml2 && cd libxml2
           wget -nv -O libxml2.7z  https://www.zlatkovic.com/pub/libxml/64bit/libxml2-2.9.3-win32-${LONG_ARCH}.7z
           7z x libxml2.7z > /dev/null
           cp bin/libxml2-2.dll $GITHUB_WORKSPACE/dist
+          wget -nv -O zlib.7z  https://www.zlatkovic.com/pub/libxml/64bit/zlib-1.2.8-win32-${LONG_ARCH}.7z
+          7z x zlib.7z > /dev/null
+          cp bin/zlib*.dll $GITHUB_WORKSPACE/dist
+          wget -nv -O iconv.7z https://www.zlatkovic.com/pub/libxml/64bit/iconv-1.14-win32-${LONG_ARCH}.7z
+          7z x iconv.7z > /dev/null
+          cp bin/libiconv*.dll $GITHUB_WORKSPACE/dist
           echo "* IIO: 0.23" >> $GITHUB_WORKSPACE/release_notes.md
 
       - name: SDRPlay download
