@@ -23,7 +23,6 @@ jobs:
       ARCH: ${{ matrix.architecture }}
       ARCH_NUM: "${{ matrix.architecture == 'x64' && '64' || '32' }}"
       CMAKE_ARCH: "${{ matrix.architecture == 'x64' && 'x64' || 'Win32' }}"
-      LONG_ARCH: "${{ matrix.architecture == 'x64' && 'x86_64' || 'x86' }}"
 
     steps:
       - run: choco install wget sed innoextract --no-progress
@@ -132,15 +131,27 @@ jobs:
           cp Windows-VS-16-2019-$CMAKE_ARCH/* ../dist/
           mv ../dist/libiio.lib ../dist/iio.lib
           mv ../dist/iio.h ../dist/include
-          wget -nv -O libxml2.7z  https://www.zlatkovic.com/pub/libxml/64bit/libxml2-2.9.3-win32-${LONG_ARCH}.7z
+          if [[ $ARCH_NUM == "64" ]]
+          then
+            echo "Getting 64-bit libs"
+            wget -nv -O libxml2.7z https://www.zlatkovic.com/pub/libxml/64bit/libxml2-2.9.3-win32-x86_x64.7z
+            wget -nv -O zlib.7z https://www.zlatkovic.com/pub/libxml/64bit/zlib-1.2.8-win32-x86_x64.7z
+            wget -nv -O iconv.7z https://www.zlatkovic.com/pub/libxml/64bit/iconv-1.14-win32-x86_x64.7z
+          else
+            echo "Getting 32-bit libs"
+            wget -nv -O libxml2.7z https://www.zlatkovic.com/pub/libxml/libxml2-2.7.8.win32.zip
+            wget -nv -O zlib.7z https://www.zlatkovic.com/pub/libxml/zlib-1.2.5.win32.zip
+            wget -nv -O iconv.7z https://www.zlatkovic.com/pub/libxml/iconv-1.9.2.win32.zip
+          fi
           7z x libxml2.7z > /dev/null
           cp bin/libxml2-2.dll $GITHUB_WORKSPACE/dist
-          wget -nv -O zlib.7z  https://www.zlatkovic.com/pub/libxml/64bit/zlib-1.2.8-win32-${LONG_ARCH}.7z
+          
           7z x zlib.7z > /dev/null
           cp bin/zlib*.dll $GITHUB_WORKSPACE/dist
-          wget -nv -O iconv.7z https://www.zlatkovic.com/pub/libxml/64bit/iconv-1.14-win32-${LONG_ARCH}.7z
+          
           7z x iconv.7z > /dev/null
           cp bin/libiconv*.dll $GITHUB_WORKSPACE/dist
+          
           echo "* IIO: 0.23" >> $GITHUB_WORKSPACE/release_notes.md
 
       - name: SDRPlay download
