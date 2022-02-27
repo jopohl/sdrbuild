@@ -21,12 +21,16 @@ jobs:
       - name: Install libiio
         run: |
           wget -nv https://github.com/analogdevicesinc/libiio/releases/download/v0.23/macOS-10.15.pkg
-          sudo installer -verbose -pkg macOS-10.15.pkg -target /
+          sudo installer -pkg macOS-10.15.pkg -target /
+          wget -nv https://github.com/analogdevicesinc/libiio/archive/refs/tags/v0.23.tar.gz
+          mkdir iio
+          tar xf v0.23.tar.gz -C iio --strip-components=1
+          sudo cp iio/iio.h /usr/local/include
 
       - name: Install SDRPlay
         run: |
           wget -nv https://www.sdrplay.com/software/SDRplay_RSP_API-MacOSX-2.13.2.pkg
-          sudo installer -verbose -pkg SDRplay_RSP_API-MacOSX-2.13.2.pkg -target /
+          sudo installer -pkg SDRplay_RSP_API-MacOSX-2.13.2.pkg -target /
 
       - run: python3 -m pip install -r data/requirements.txt
         working-directory: urh
