@@ -155,7 +155,7 @@ jobs:
             7z x zlib.7z > /dev/null
             cp zlib-1.2.5/bin/zlib*.dll $GITHUB_WORKSPACE/dist
           
-            wget -nv -O iconv.7z https://www.zlatkovic.com/pub/libxml/iconv-1.9.2.win32.
+            wget -nv -O iconv.7z https://www.zlatkovic.com/pub/libxml/iconv-1.9.2.win32.zip
             7z x iconv.7z > /dev/null
             cp iconv-1.9.2.win32/bin/libiconv*.dll $GITHUB_WORKSPACE/dist
           fi
