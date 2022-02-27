@@ -54,75 +54,75 @@ jobs:
           lib /machine:$ARCH /def:libfftw3l-3.def
           ls $GITHUB_WORKSPACE/fftw
 
-      - name: Setup FX3SDK
-        run: |
-          wget -nv http://downloads.myriadrf.org/project/limesuite/appveyor/FX3SDK.zip
-          7z x FX3SDK.zip -ofx3sdk > /dev/null
-          ls $GITHUB_WORKSPACE/fx3sdk
+#      - name: Setup FX3SDK
+#        run: |
+#          wget -nv http://downloads.myriadrf.org/project/limesuite/appveyor/FX3SDK.zip
+#          7z x FX3SDK.zip -ofx3sdk > /dev/null
+#          ls $GITHUB_WORKSPACE/fx3sdk
+#
+#      - name: AirSpy build
+#        run: |
+#          git clone --depth 1 https://github.com/airspy/airspyone_host
+#          mkdir airspyone_host/build && cd airspyone_host/build
+#          cmake -A $CMAKE_ARCH -DCMAKE_BUILD_TYPE=Release \
+#                -DLIBUSB_LIBRARIES=$GITHUB_WORKSPACE/libusb/VS2019/MS$ARCH_NUM/Release/lib/libusb-1.0.lib \
+#                -DLIBUSB_INCLUDE_DIR=$GITHUB_WORKSPACE/libusb/include/libusb-1.0 \
+#                -DTHREADS_PTHREADS_INCLUDE_DIR=$GITHUB_WORKSPACE/pthreads/Pre-built.2/include \
+#                -DTHREADS_PTHREADS_WIN32_LIBRARY=$GITHUB_WORKSPACE/pthreads/Pre-built.2/lib/$ARCH/pthreadVC2.lib ..
+#          cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
+#          cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
+#          echo "* AirSpy: `git show --format='%h (%s, %as)' --no-patch`" >> $GITHUB_WORKSPACE/release_notes.md
+#
+#      - name: BladeRF download
+#        run: |
+#          wget -nv -O bladerf.exe -nv https://www.nuand.com/windows_installers/bladeRF-win-installer-2021.03.exe
+#          innoextract bladerf.exe -d bladerf
+#          cp bladerf/app/include/* dist/include
+#          cp bladerf/app/$ARCH/* dist
+#          echo "* BladeRF: 2021.03" >> $GITHUB_WORKSPACE/release_notes.md
+#
+#      - name: HackRF build
+#        run: |
+#          git clone --depth 1 https://github.com/greatscottgadgets/hackrf
+#          mkdir hackrf/host/build && cd hackrf/host/build
+#          cmake -A $CMAKE_ARCH -DCMAKE_BUILD_TYPE=Release\
+#                -DLIBUSB_LIBRARIES=$GITHUB_WORKSPACE/libusb/VS2019/MS$ARCH_NUM/Release/lib/libusb-1.0.lib \
+#                -DLIBUSB_INCLUDE_DIR=$GITHUB_WORKSPACE/libusb/include/libusb-1.0 \
+#                -DTHREADS_PTHREADS_INCLUDE_DIR=$GITHUB_WORKSPACE/pthreads/Pre-built.2/include \
+#                -DTHREADS_PTHREADS_WIN32_LIBRARY=$GITHUB_WORKSPACE/pthreads/Pre-built.2/lib/$ARCH/pthreadVC2.lib \
+#                -DFFTW_INCLUDES=$GITHUB_WORKSPACE/fftw \
+#                -DFFTW_LIBRARIES=$GITHUB_WORKSPACE/fftw/libfftw3f-3.lib ..
+#          cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
+#          cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
+#          echo "* HackRF: `git show --format='%h (%s, %as)' --no-patch`" >> $GITHUB_WORKSPACE/release_notes.md
+#
+#      - name: LimeSuite build
+#        run: |
+#          git clone https://github.com/myriadrf/LimeSuite && cd LimeSuite
+#          git show --format="%h (%s, %as)" --no-patch
+#          mkdir builddir && cd builddir
+#          cmake -A $CMAKE_ARCH \
+#                -DCMAKE_BUILD_TYPE=Release \
+#                -DENABLE_GUI=OFF \
+#                -DFX3_SDK_PATH=$GITHUB_WORKSPACE/fx3sdk \
+#                ..
+#          cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
+#          cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
+#          echo "* LimeSuite: `git show --format='%h (%s, %as)' --no-patch`" >> $GITHUB_WORKSPACE/release_notes.md
 
-      - name: AirSpy build
-        run: |
-          git clone --depth 1 https://github.com/airspy/airspyone_host
-          mkdir airspyone_host/build && cd airspyone_host/build
-          cmake -A $CMAKE_ARCH -DCMAKE_BUILD_TYPE=Release \
-                -DLIBUSB_LIBRARIES=$GITHUB_WORKSPACE/libusb/VS2019/MS$ARCH_NUM/Release/lib/libusb-1.0.lib \
-                -DLIBUSB_INCLUDE_DIR=$GITHUB_WORKSPACE/libusb/include/libusb-1.0 \
-                -DTHREADS_PTHREADS_INCLUDE_DIR=$GITHUB_WORKSPACE/pthreads/Pre-built.2/include \
-                -DTHREADS_PTHREADS_WIN32_LIBRARY=$GITHUB_WORKSPACE/pthreads/Pre-built.2/lib/$ARCH/pthreadVC2.lib ..
-          cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
-          cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
-          echo "* AirSpy: `git show --format='%h (%s, %as)' --no-patch`" >> $GITHUB_WORKSPACE/release_notes.md
-
-      - name: BladeRF download
-        run: |
-          wget -nv -O bladerf.exe -nv https://www.nuand.com/windows_installers/bladeRF-win-installer-2021.03.exe
-          innoextract bladerf.exe -d bladerf
-          cp bladerf/app/include/* dist/include
-          cp bladerf/app/$ARCH/* dist
-          echo "* BladeRF: 2021.03" >> $GITHUB_WORKSPACE/release_notes.md
-
-      - name: HackRF build
-        run: |
-          git clone --depth 1 https://github.com/greatscottgadgets/hackrf
-          mkdir hackrf/host/build && cd hackrf/host/build
-          cmake -A $CMAKE_ARCH -DCMAKE_BUILD_TYPE=Release\
-                -DLIBUSB_LIBRARIES=$GITHUB_WORKSPACE/libusb/VS2019/MS$ARCH_NUM/Release/lib/libusb-1.0.lib \
-                -DLIBUSB_INCLUDE_DIR=$GITHUB_WORKSPACE/libusb/include/libusb-1.0 \
-                -DTHREADS_PTHREADS_INCLUDE_DIR=$GITHUB_WORKSPACE/pthreads/Pre-built.2/include \
-                -DTHREADS_PTHREADS_WIN32_LIBRARY=$GITHUB_WORKSPACE/pthreads/Pre-built.2/lib/$ARCH/pthreadVC2.lib \
-                -DFFTW_INCLUDES=$GITHUB_WORKSPACE/fftw \
-                -DFFTW_LIBRARIES=$GITHUB_WORKSPACE/fftw/libfftw3f-3.lib ..
-          cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
-          cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
-          echo "* HackRF: `git show --format='%h (%s, %as)' --no-patch`" >> $GITHUB_WORKSPACE/release_notes.md
-
-      - name: LimeSuite build
-        run: |
-          git clone https://github.com/myriadrf/LimeSuite && cd LimeSuite
-          git show --format="%h (%s, %as)" --no-patch
-          mkdir builddir && cd builddir
-          cmake -A $CMAKE_ARCH \
-                -DCMAKE_BUILD_TYPE=Release \
-                -DENABLE_GUI=OFF \
-                -DFX3_SDK_PATH=$GITHUB_WORKSPACE/fx3sdk \
-                ..
-          cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
-          cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
-          echo "* LimeSuite: `git show --format='%h (%s, %as)' --no-patch`" >> $GITHUB_WORKSPACE/release_notes.md
-
-
-      - name: RTL-SDR build
-        run: |
-          git clone --depth 1 https://github.com/osmocom/rtl-sdr
-          mkdir rtl-sdr/build && cd rtl-sdr/build
-          cmake -A $CMAKE_ARCH -DCMAKE_BUILD_TYPE=Release\
-                -DLIBUSB_LIBRARIES=$GITHUB_WORKSPACE/libusb/VS2019/MS$ARCH_NUM/Release/lib/libusb-1.0.lib \
-                -DLIBUSB_INCLUDE_DIRS=$GITHUB_WORKSPACE/libusb/include/libusb-1.0 \
-                -DTHREADS_PTHREADS_INCLUDE_DIR=$GITHUB_WORKSPACE/pthreads/Pre-built.2/include \
-                -DTHREADS_PTHREADS_LIBRARY=$GITHUB_WORKSPACE/pthreads/Pre-built.2/lib/$ARCH/pthreadVC2.lib ..
-          cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
-          cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
-          echo "* RTL-SDR: `git show --format='%h (%s, %as)' --no-patch`" >> $GITHUB_WORKSPACE/release_notes.md
+#
+#      - name: RTL-SDR build
+#        run: |
+#          git clone --depth 1 https://github.com/osmocom/rtl-sdr
+#          mkdir rtl-sdr/build && cd rtl-sdr/build
+#          cmake -A $CMAKE_ARCH -DCMAKE_BUILD_TYPE=Release\
+#                -DLIBUSB_LIBRARIES=$GITHUB_WORKSPACE/libusb/VS2019/MS$ARCH_NUM/Release/lib/libusb-1.0.lib \
+#                -DLIBUSB_INCLUDE_DIRS=$GITHUB_WORKSPACE/libusb/include/libusb-1.0 \
+#                -DTHREADS_PTHREADS_INCLUDE_DIR=$GITHUB_WORKSPACE/pthreads/Pre-built.2/include \
+#                -DTHREADS_PTHREADS_LIBRARY=$GITHUB_WORKSPACE/pthreads/Pre-built.2/lib/$ARCH/pthreadVC2.lib ..
+#          cmake --build . --parallel $NUMBER_OF_PROCESSORS --config Release
+#          cmake --install . --prefix $GITHUB_WORKSPACE/dist --config Release
+#          echo "* RTL-SDR: `git show --format='%h (%s, %as)' --no-patch`" >> $GITHUB_WORKSPACE/release_notes.md
 
       - name: PlutoSDR download
         run: |
@@ -142,8 +142,10 @@ jobs:
           7z x iconv.7z > /dev/null
           cp bin/libiconv*.dll $GITHUB_WORKSPACE/dist
           wget -nv -O mingw.7z https://www.zlatkovic.com/pub/libxml/64bit/mingwrt-5.2.0-win32-${LONG_ARCH}.7z
+          7z x mingw.7z > /dev/null
           [[ -e bin/libgcc*.dll ]] && cp bin/libgcc*.dll $GITHUB_WORKSPACE/dist
           echo "* IIO: 0.23" >> $GITHUB_WORKSPACE/release_notes.md
+          ls $GITHUB_WORKSPACE/dist
 
       - name: SDRPlay download
         run: |
