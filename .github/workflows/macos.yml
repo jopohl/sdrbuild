@@ -20,7 +20,7 @@ jobs:
 
       - name: Build libiio
         run: |
-          wget -nv https://github.com/analogdevicesinc/libiio/archive/refs/tags/v0.23.tar.gz -O iio.tar.gz
+          wget -nv https://github.com/analogdevicesinc/libiio/archive/refs/tags/v0.15.tar.gz -O iio.tar.gz
           mkdir iio
           tar xf iio.tar.gz -C iio --strip-components=1
           mkdir iio/build && cd iio/build
@@ -28,7 +28,6 @@ jobs:
                 -DCMAKE_INSTALL_LIBDIR=/usr/local/lib \
                 -DCMAKE_INSTALL_INCLUDEDIR=/usr/local/include \
                 -DCMAKE_INSTALL_BINDIR=/usr/local/bin \
-                -DOSX_INSTALL_FRAMEWORKSDIR=/usr \
                 -DSKIP_INSTALL_ALL=OFF \
                 -DOSX_PACKAGE=OFF ..
           cmake --build . --parallel 2 --config Release
