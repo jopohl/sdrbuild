@@ -25,8 +25,8 @@ jobs:
           tar xf iio.tar.gz -C iio --strip-components=1
           mkdir iio/build && cd iio/build
           cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local ..
-          make -j2
-          sudo make install
+          cmake --build . --parallel 2 --config Release
+          sudo cmake --install . --prefix /usr/local --config Release
 
       - name: Install libiio
         run: |
