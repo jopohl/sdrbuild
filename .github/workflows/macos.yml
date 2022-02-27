@@ -24,7 +24,7 @@ jobs:
           mkdir iio
           tar xf iio.tar.gz -C iio --strip-components=1
           mkdir iio/build && cd iio/build
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local ..
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local -DOSX_PACKAGE=OFF ..
           cmake --build . --parallel 2 --config Release
           sudo cmake --install . --prefix /usr/local --config Release
 
