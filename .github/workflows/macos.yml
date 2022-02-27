@@ -28,6 +28,7 @@ jobs:
                 -DCMAKE_INSTALL_LIBDIR=/usr/local/lib \
                 -DCMAKE_INSTALL_INCLUDEDIR=/usr/local/include \
                 -DCMAKE_INSTALL_BINDIR=/usr/local/bin \
+                -DOSX_INSTALL_FRAMEWORKSDIR=/usr
                 -DSKIP_INSTALL_ALL=OFF \
                 -DOSX_PACKAGE=OFF ..
           cmake --build . --parallel 2 --config Release
