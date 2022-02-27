@@ -157,7 +157,7 @@ jobs:
           
             wget -nv -O iconv.7z https://www.zlatkovic.com/pub/libxml/iconv-1.9.2.win32.zip
             7z x iconv.7z > /dev/null
-            cp iconv-1.9.2.win32/bin/libiconv*.dll $GITHUB_WORKSPACE/dist
+            cp iconv-1.9.2.win32/bin/iconv*.dll $GITHUB_WORKSPACE/dist
           fi
 
           echo "* IIO: 0.23" >> $GITHUB_WORKSPACE/release_notes.md
