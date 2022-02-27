@@ -13,13 +13,15 @@ jobs:
     steps:
       - run: git clone https://github.com/jopohl/urh
 
-      - name: Install SDR libs
-        run: |
-          brew tap pothosware/homebrew-pothos
-          brew install airspy hackrf librtlsdr libbladerf limesuite libiio portaudio uhd
+#      - name: Install SDR libs
+#        run: |
+#          brew tap pothosware/homebrew-pothos
+#          brew install airspy hackrf librtlsdr libbladerf limesuite libiio portaudio uhd
 
-      - name: Fix libiio
+      - name: Install libiio
         run: |
+          wget -nv https://github.com/analogdevicesinc/libiio/releases/download/v0.23/macOS-10.15.pkg
+          sudo installer -pkg macOS-10.15.pkg -target /
           sudo cp /Library/Frameworks/iio.framework/iio /usr/local/lib/iio.dylib
           sudo install_name_tool -id "/usr/local/lib/iio.dylib" /usr/local/lib/iio.dylib
           file /usr/local/lib/iio.dylib
