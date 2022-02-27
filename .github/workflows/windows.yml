@@ -169,6 +169,7 @@ jobs:
       - name: Check native backends
         run: |
           git clone --depth 1 https://github.com/jopohl/urh && cd urh
+          git checkout native_test
           mkdir src/urh/dev/native/lib/shared
           cp -r ../dist/* src/urh/dev/native/lib/shared/
           python --version
