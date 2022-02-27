@@ -37,8 +37,7 @@ jobs:
       - run: python3 -m pip install -r data/requirements.txt
         working-directory: urh
 
-      - name: Build extensions
-        run: python3 setup.py build_ext --inplace --with-plutosdr
+      - run: python3 setup.py build_ext --inplace
         working-directory: urh
 
       - name: Check native backends
