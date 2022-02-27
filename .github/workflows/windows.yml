@@ -126,12 +126,12 @@ jobs:
       - name: PlutoSDR download
         run: |
           mkdir iio && cd iio
-          wget -nv -O iio.zip https://github.com/analogdevicesinc/libiio/releases/download/v0.23/Windows-VS-16-2019-$CMAKE_ARCH.zip
+          wget -nv -O iio.zip https://github.com/analogdevicesinc/libiio/releases/download/v0.21/libiio-0.21.g565bf68-Windows.zip
           7z x iio.zip > /dev/null
-          cp Windows-VS-16-2019-$CMAKE_ARCH/* ../dist/
+          cp libiio-0.21.g565bf68/MS${ARCH_NUM}/* ../dist/
+          cp libiio-0.21.g565bf68/include/* ../dist/include
           mv ../dist/libiio.lib ../dist/iio.lib
-          mv ../dist/iio.h ../dist/include
-          echo "* IIO: 0.23" >> $GITHUB_WORKSPACE/release_notes.md
+          echo "* IIO: 0.21" >> $GITHUB_WORKSPACE/release_notes.md
 
       - name: SDRPlay download
         run: |
