@@ -13,10 +13,10 @@ jobs:
     steps:
       - run: git clone https://github.com/jopohl/urh
 
-#      - name: Install SDR libs
-#        run: |
-#          brew tap pothosware/homebrew-pothos
-#          brew install airspy hackrf librtlsdr libbladerf limesuite libiio portaudio uhd
+      - name: Install SDR libs
+        run: |
+          brew tap pothosware/homebrew-pothos
+          brew install airspy hackrf librtlsdr libbladerf limesuite portaudio uhd
 
       - name: Install libiio
         run: |
@@ -25,7 +25,6 @@ jobs:
           cd /usr/local/lib
           sudo cp /Library/Frameworks/iio.framework/iio /usr/local/lib/libiio.dylib
           sudo install_name_tool -id "/usr/local/lib/libiio.dylib" /usr/local/lib/libiio.dylib
-
           file /usr/local/lib/libiio.dylib
           otool -L /usr/local/lib/libiio.dylib
           sudo cp /Library/Frameworks/iio.framework/Versions/0.23/Headers/iio.h /usr/local/include
