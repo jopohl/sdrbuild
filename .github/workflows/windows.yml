@@ -1,4 +1,4 @@
-name: build
+name: windows
 
 on:
   push:
@@ -15,6 +15,7 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [windows-2019]
         architecture: [x86, x64]
@@ -22,6 +23,7 @@ jobs:
       ARCH: ${{ matrix.architecture }}
       ARCH_NUM: "${{ matrix.architecture == 'x64' && '64' || '32' }}"
       CMAKE_ARCH: "${{ matrix.architecture == 'x64' && 'x64' || 'Win32' }}"
+      LONG_ARCH: "${{ matrix.architecture == 'x64' && 'x86_64' || 'x86' }}"
 
     steps:
       - run: choco install wget sed innoextract --no-progress
@@ -128,6 +130,21 @@ jobs:
           wget -nv -O iio.zip https://github.com/analogdevicesinc/libiio/releases/download/v0.23/Windows-VS-16-2019-$CMAKE_ARCH.zip
           7z x iio.zip > /dev/null
           cp Windows-VS-16-2019-$CMAKE_ARCH/* ../dist/
+          mv ../dist/libiio.lib ../dist/iio.lib
+          mv ../dist/iio.h ../dist/include
+          wget -nv -O libxml2.7z  https://www.zlatkovic.com/pub/libxml/64bit/libxml2-2.9.3-win32-${LONG_ARCH}.7z
+          7z x libxml2.7z > /dev/null
+          cp bin/libxml2-2.dll $GITHUB_WORKSPACE/dist
+          wget -nv -O zlib.7z  https://www.zlatkovic.com/pub/libxml/64bit/zlib-1.2.8-win32-${LONG_ARCH}.7z
+          7z x zlib.7z > /dev/null
+          cp bin/zlib*.dll $GITHUB_WORKSPACE/dist
+          wget -nv -O iconv.7z https://www.zlatkovic.com/pub/libxml/64bit/iconv-1.14-win32-${LONG_ARCH}.7z
+          7z x iconv.7z > /dev/null
+          cp bin/libiconv*.dll $GITHUB_WORKSPACE/dist
+          wget -nv -O mingw.7z https://www.zlatkovic.com/pub/libxml/64bit/mingwrt-5.2.0-win32-${LONG_ARCH}.7z
+          7z x mingw.7z > /dev/null
+          cp bin/libgcc*.dll $GITHUB_WORKSPACE/dist
+          cp bin/libwin*.dll $GITHUB_WORKSPACE/dist
           echo "* IIO: 0.23" >> $GITHUB_WORKSPACE/release_notes.md
 
       - name: SDRPlay download
@@ -136,6 +153,7 @@ jobs:
           wget -nv -O sdrplay.exe https://www.sdrplay.com/software/SDRplay_RSP_API-Windows-2.13.1.exe
           innoextract sdrplay.exe
           cp app/API/inc/* ../dist/include
+          mv ../dist/include/mir_sdr.h ../dist/include/mirsdrapi-rsp.h
           cp app/API/$ARCH/* ../dist
           echo "* SDRPlay: 2.13.1" >> $GITHUB_WORKSPACE/release_notes.md
 
@@ -157,10 +175,27 @@ jobs:
           rm -rf dist/bin dist/lib dist/cmake dist/pkgconfig
           rm dist/*.exe
 
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.7"
+          architecture: ${{ matrix.architecture }}
+
       - uses: actions/upload-artifact@v2
         with:
           name: win-${{ matrix.architecture }}
           path: dist
+
+      - name: Check native backends
+        run: |
+          git clone --depth 1 https://github.com/jopohl/urh && cd urh
+          mkdir src/urh/dev/native/lib/shared
+          cp -r ../dist/* src/urh/dev/native/lib/shared/
+          python --version
+          python -m pip install -r data/requirements.txt
+          python setup.py build_ext --inplace
+          python -m pip install .
+          python data/check_native_backends.py
 
       - name: Create zip
         run: 7z a -tzip win-$ARCH.zip "./dist/*"
