@@ -22,8 +22,13 @@ jobs:
         run: |
           wget -nv https://github.com/analogdevicesinc/libiio/releases/download/v0.23/macOS-10.15.pkg
           sudo installer -pkg macOS-10.15.pkg -target /
+          cd /usr/local/lib
           sudo cp /Library/Frameworks/iio.framework/iio /usr/local/lib/iio.dylib
           sudo install_name_tool -id "/usr/local/lib/iio.dylib" /usr/local/lib/iio.dylib
+          sudo install_name_tool -change /usr/local/opt/libusb/lib/libusb-1.0.0.dylib @rpath/libusb-1.0.dylib libiio.dylib
+          sudo install_name_tool -add_rpath @loader_path/../../../../../usr/lib libiio.dylib
+          sudo install_name_tool -add_rpath /usr/local/opt/libusb/lib libiio.dylib
+          
           file /usr/local/lib/iio.dylib
           otool -L /usr/local/lib/iio.dylib
           sudo cp /Library/Frameworks/iio.framework/Versions/0.23/Headers/iio.h /usr/local/include
