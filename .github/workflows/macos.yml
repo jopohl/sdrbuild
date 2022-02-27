@@ -18,6 +18,29 @@ jobs:
           brew tap pothosware/homebrew-pothos
           brew install airspy hackrf librtlsdr libbladerf limesuite libiio portaudio uhd
 
+      - name: Fix libiio
+        run: |
+			cd usr/lib
+			ln -fs ../../Library/Frameworks/iio.framework/iio libiio.dylib
+			install_name_tool -change /usr/local/opt/libusb/lib/libusb-1.0.0.dylib @rpath/libusb-1.0.dylib libiio.dylib
+			install_name_tool -add_rpath @loader_path/../../../../../usr/lib libiio.dylib
+			install_name_tool -add_rpath /usr/local/opt/libusb/lib libiio.dylib
+
+			cd ../include
+			ln -s ../../Library/Frameworks/iio.framework/Headers/iio.h iio.h
+
+			# Update references for tools
+			cd ../..
+			TOOLS=Library/Frameworks/iio.framework/Tools/*
+			for tool in $TOOLS
+			do
+				install_name_tool -add_rpath @loader_path/../../ $tool
+			done
+			cp /usr/local/lib/libusb-1.0.dylib usr/lib/
+			chmod +w usr/lib/libusb-1.0.dylib
+			install_name_tool -id @rpath/libusb-1.0.dylib usr/lib/libusb-1.0.dylib
+
+
       - name: Install SDRPlay
         run: |
           wget -nv https://www.sdrplay.com/software/SDRplay_RSP_API-MacOSX-2.13.2.pkg
