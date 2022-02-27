@@ -161,7 +161,7 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/jopohl/urh && cd urh
           mkdir src/urh/dev/native/lib/shared
-          cp -r dist/* src/urh/dev/native/lib/shared/
+          cp -r ../dist/* src/urh/dev/native/lib/shared/
           python3 --version
           python3 -m pip install -r data/requirements.txt
           python3 setup.py build_ext --inplace
