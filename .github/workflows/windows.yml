@@ -141,7 +141,7 @@ jobs:
           7z x iconv.7z > /dev/null
           cp bin/libiconv*.dll $GITHUB_WORKSPACE/dist
           wget -nv -O mingw.7z https://www.zlatkovic.com/pub/libxml/64bit/mingwrt-5.2.0-win32-${LONG_ARCH}.7z
-          cp bin/*.dll $GITHUB_WORKSPACE/dist
+          [[ -e bin/libgcc*.dll ]] && cp bin/libgcc*.dll $GITHUB_WORKSPACE/dist
           echo "* IIO: 0.23" >> $GITHUB_WORKSPACE/release_notes.md
 
       - name: SDRPlay download
