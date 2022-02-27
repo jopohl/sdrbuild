@@ -11,38 +11,12 @@ jobs:
     runs-on: macos-10.15
 
     steps:
-      - run: git clone https://github.com/jopohl/urh && cd urh && git checkout apicheck
+      - run: git clone https://github.com/jopohl/urh
 
-      #- name: Install SDR libs
-      #  run: |
-      #    brew tap pothosware/homebrew-pothos
-      #    brew update
-
-      - name: Build libiio
+      - name: Install SDR libs
         run: |
-          wget -nv https://github.com/analogdevicesinc/libiio/archive/refs/tags/v0.15.tar.gz -O iio.tar.gz
-          mkdir iio
-          tar xf iio.tar.gz -C iio --strip-components=1
-          mkdir iio/build && cd iio/build
-          cmake -DCMAKE_BUILD_TYPE=Release \
-                -DCMAKE_INSTALL_LIBDIR=/usr/local/lib \
-                -DCMAKE_INSTALL_INCLUDEDIR=/usr/local/include \
-                -DCMAKE_INSTALL_BINDIR=/usr/local/bin \
-                -DSKIP_INSTALL_ALL=OFF \
-                -DOSX_PACKAGE=OFF ..
-          cmake --build . --parallel 2 --config Release
-          sudo cmake --install . --prefix /usr/local --config Release
-
-      - name: Install libiio
-        run: |
-          wget -nv https://github.com/analogdevicesinc/libiio/releases/download/v0.23/macOS-10.15.pkg
-          sudo installer -pkg macOS-10.15.pkg -target /
-          ls -l /Library/Frameworks/iio.framework/iio
-          ls -l /Library/Frameworks/iio.framework/Versions/Current
-          ls -l /Library/Frameworks/iio.framework/Versions/0.23/iio
-          file /Library/Frameworks/iio.framework/Versions/0.23/iio
-          ln -s /Library/Frameworks/iio.framework/Versions/0.23/iio /usr/local/lib
-          cp /Library/Frameworks/iio.framework/Versions/0.23/Headers/iio.h /usr/local/include
+          brew tap pothosware/homebrew-pothos
+          brew install airspy hackrf librtlsdr libbladerf limesuite libiio portaudio uhd
 
       - name: Install SDRPlay
         run: |
@@ -53,7 +27,7 @@ jobs:
         working-directory: urh
 
       - name: Build extensions
-        run: python3 setup.py build_ext --inplace --with-plutosdr
+        run: python3 setup.py build_ext --inplace
         working-directory: urh
 
       - name: Check native backends
