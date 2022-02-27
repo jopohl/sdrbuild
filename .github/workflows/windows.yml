@@ -23,7 +23,7 @@ jobs:
       ARCH: ${{ matrix.architecture }}
       ARCH_NUM: "${{ matrix.architecture == 'x64' && '64' || '32' }}"
       CMAKE_ARCH: "${{ matrix.architecture == 'x64' && 'x64' || 'Win32' }}"
-      LONG_ARCH: "${{ matrix.architecture == 'x64' && 'x86_x64' || 'x86' }}"
+      LONG_ARCH: "${{ matrix.architecture == 'x64' && 'x86_64' || 'x86' }}"
 
     steps:
       - run: choco install wget sed innoextract --no-progress
