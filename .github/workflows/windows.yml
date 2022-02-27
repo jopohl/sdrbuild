@@ -128,6 +128,7 @@ jobs:
           wget -nv -O iio.zip https://github.com/analogdevicesinc/libiio/releases/download/v0.23/Windows-VS-16-2019-$CMAKE_ARCH.zip
           7z x iio.zip > /dev/null
           cp Windows-VS-16-2019-$CMAKE_ARCH/* ../dist/
+          mv ../dist/libiio.lib ../dist/iio.lib
           echo "* IIO: 0.23" >> $GITHUB_WORKSPACE/release_notes.md
 
       - name: SDRPlay download
@@ -136,6 +137,7 @@ jobs:
           wget -nv -O sdrplay.exe https://www.sdrplay.com/software/SDRplay_RSP_API-Windows-2.13.1.exe
           innoextract sdrplay.exe
           cp app/API/inc/* ../dist/include
+          mv ../dist/include/mir_sdr.h ../dist/include/mirsdrapi-rsp.h
           cp app/API/$ARCH/* ../dist
           echo "* SDRPlay: 2.13.1" >> $GITHUB_WORKSPACE/release_notes.md
 
