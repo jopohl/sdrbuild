@@ -157,6 +157,17 @@ jobs:
           rm -rf dist/bin dist/lib dist/cmake dist/pkgconfig
           rm dist/*.exe
 
+      - name: Check native backends
+        run: |
+          git clone --depth 1 https://github.com/jopohl/urh && cd urh
+          mkdir src/urh/dev/native/lib/shared
+          cp -r dist/* src/urh/dev/native/lib/shared/
+          python3 --version
+          python3 -m pip install -r data/requirements.txt
+          python3 setup.py build_ext --inplace
+          python3 -m pip install .
+          python3 data/check_native_backends.py
+
       - uses: actions/upload-artifact@v2
         with:
           name: win-${{ matrix.architecture }}
