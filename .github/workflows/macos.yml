@@ -37,7 +37,7 @@ jobs:
         working-directory: urh
 
       - name: Build extensions
-        run: python3 setup.py build_ext --inplace
+        run: python3 setup.py build_ext --inplace --with-plutosdr
         working-directory: urh
 
       - name: Check native backends
