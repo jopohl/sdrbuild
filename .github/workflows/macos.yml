@@ -1,0 +1,46 @@
+name: macos
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: macos-10.15
+
+    steps:
+      - run: git clone https://github.com/jopohl/urh
+
+      - name: Install SDR libs
+        run: |
+          brew tap pothosware/homebrew-pothos
+          brew install airspy hackrf librtlsdr libbladerf limesuite portaudio uhd
+
+      - name: Install libiio
+        run: |
+          wget -nv https://github.com/analogdevicesinc/libiio/releases/download/v0.23/macOS-10.15.pkg
+          sudo installer -pkg macOS-10.15.pkg -target /
+          sudo cp /Library/Frameworks/iio.framework/iio /usr/local/lib/libiio.dylib
+          sudo install_name_tool -id "/usr/local/lib/libiio.dylib" /usr/local/lib/libiio.dylib
+          file /usr/local/lib/libiio.dylib
+          otool -L /usr/local/lib/libiio.dylib
+          sudo cp /Library/Frameworks/iio.framework/Versions/0.23/Headers/iio.h /usr/local/include
+
+      - name: Install SDRPlay
+        run: |
+          wget -nv https://www.sdrplay.com/software/SDRplay_RSP_API-MacOSX-2.13.2.pkg
+          sudo installer -pkg SDRplay_RSP_API-MacOSX-2.13.2.pkg -target /
+
+      - run: python3 -m pip install -r data/requirements.txt
+        working-directory: urh
+
+      - run: python3 setup.py build_ext --inplace
+        working-directory: urh
+
+      - name: Check native backends
+        run: |
+          python3 -m pip install .
+          python3 data/check_native_backends.py
+        working-directory: urh
