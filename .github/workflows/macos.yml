@@ -17,7 +17,11 @@ jobs:
         run: |
           brew tap pothosware/homebrew-pothos
           brew update
-          brew install libiio
+
+      - name: Install libiio
+        run: |
+          wget -nv https://github.com/analogdevicesinc/libiio/releases/download/v0.23/macOS-10.15.pkg
+          sudo installer -pkg macOS-10.15.pkg -target /
 
       - name: Install SDRPlay
         run: |
