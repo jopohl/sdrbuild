@@ -22,8 +22,10 @@ jobs:
         run: |
           wget -nv https://github.com/analogdevicesinc/libiio/releases/download/v0.23/macOS-10.15.pkg
           sudo installer -pkg macOS-10.15.pkg -target /
-          ls -l /Library/Frameworks/iio.framework/iio 
-          ln -s /Library/Frameworks/iio.framework/iio /usr/local/lib
+          ls -l /Library/Frameworks/iio.framework/iio
+          ls -l /Library/Frameworks/iio.framework/Versions/Current
+          ls -l /Library/Frameworks/iio.framework/Versions/0.23/iio
+          cp /Library/Frameworks/iio.framework/Versions/0.23/iio /usr/local/lib
           cp /Library/Frameworks/iio.framework/Versions/0.23/Headers/iio.h /usr/local/include
 
       - name: Install SDRPlay
