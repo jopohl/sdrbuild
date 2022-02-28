@@ -33,12 +33,12 @@ jobs:
           mkdir dist
           if [[ $ARCH_NUM == "64" ]]
           then
-            DLLDIR="C:\Windows\SysWOW64\"
+            DLLDIR="/C/Windows/SysWOW64"
           else
-            DLLDIR="C:\Windows\System32\"
+            DLLDIR="/C/Windows/System32"
           fi
           echo "Getting DLLs from $DLLDIR"
-          cp $DLLDIR\vcruntime140.dll $DLLDIR\concrt140.dll $DLLDIR\msvcp140.dll $DLLDIR\vccorlib140.dll dist
+          cp $DLLDIR/vcruntime140.dll $DLLDIR/concrt140.dll $DLLDIR/msvcp140.dll $DLLDIR/vccorlib140.dll dist
           ls dist
 
       - name: Setup libusb
