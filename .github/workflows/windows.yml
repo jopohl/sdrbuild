@@ -28,6 +28,19 @@ jobs:
     steps:
       - run: choco install wget sed innoextract --no-progress
 
+      - name: Setup dist folder
+        run: |
+          mkdir dist
+          if [[ $ARCH_NUM == "64" ]]
+          then
+            DLLDIR="C:\Windows\SysWOW64"
+          else
+            DLLDIR="C:\Windows\System32"
+          fi
+          echo "Getting DLLs from $DLLDIR"
+          cp $DLLDIR\vcruntime140.dll $DLLDIR\concrt140.dll $DLLDIR\msvcp140.dll $DLLDIR\vccorlib140.dll dist\
+          ls dist
+
       - name: Setup libusb
         run: |
           wget -nv https://github.com/libusb/libusb/releases/download/v1.0.25/libusb-1.0.25.7z
